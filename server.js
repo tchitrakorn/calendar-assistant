@@ -29,6 +29,16 @@ app.get('/analytics', (req, res) => {
   res.send("analytics response");
 });
 
+// Retrieves user information 
+app.get('/data', (req, res) => {
+  res.send("data response");
+});
+
+// Stores/manages user information 
+app.post('/data', (req, res) => {
+  res.send("data response");
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
