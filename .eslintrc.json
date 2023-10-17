@@ -4,7 +4,7 @@
         "es2021": true
     },
     "extends": [
-        "standard-with-typescript",
+        "standard",
         "plugin:react/recommended"
     ],
     "parserOptions": {
@@ -15,5 +15,19 @@
         "react"
     ],
     "rules": {
-    }
+    },
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx"],
+            "extends": [
+                "standard-with-typescript"
+            ],
+            "parserOptions": {
+                "project": "./tsconfig.json"
+            },
+            // any TypeScript specific rules here
+            "rules": {
+            }
+        }
+    ]
 }
