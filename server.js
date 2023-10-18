@@ -2,7 +2,7 @@ const express = require('express');
 const { body, matchedData, validationResult } = require('express-validator');
 const path = require('path');
 const bodyParser = require('body-parser');
-const itemController = require('./controllers/itemControllers');
+const itemController = require('./src/controllers/itemControllers');
 
 const app = express();
 const port = 3000;
