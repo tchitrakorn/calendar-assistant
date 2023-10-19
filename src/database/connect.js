@@ -1,6 +1,4 @@
 const { Client } = require('pg')
-// const dotenv = require('dotenv').config({ path: __dirname + '/.env' });
-// const connectionString = process.env.connectionString;
 
 const client = new Client({
   database: 'calendar_assistant_db'
