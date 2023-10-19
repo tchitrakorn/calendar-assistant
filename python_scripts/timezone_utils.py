@@ -1,25 +1,7 @@
-import datetime
-import os
-
-import pytz
 from geopy.geocoders import Nominatim
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from oauth2client.client import OAuth2WebServerFlow
 from timezonefinder import TimezoneFinder
-
-
-with open('./python-scripts/credentials.json', 'r') as token_file:
-      creds = Credentials.from_authorized_user_file('./python-scripts/credentials.json')
-  
-try:
-    service = build('calendar', 'v3', credentials=creds)
-except HttpError as error:
-    print("An error occurred: ", error)
-
+import datetime
+import pytz
 
 def userTimeZone(city_name:str):
   """Get the time zone based on a user's city"""
@@ -65,35 +47,9 @@ def convertTime(original_datetime_str, \
   target_datetime_str = target_datetime.isoformat()
   return target_datetime_str
 
-def calendarTimeZone():
+def calendarTimeZone(service):
   # Get the user's primary calendar
   calendar_list_entry = service.calendarList().get(calendarId='primary').execute()
   # Retrieve the time zone of the user's primary calendar
   time_zone = calendar_list_entry.get('timeZone')
   return time_zone
-
-def upcomingEvents(service, CLIENT_CITY)-> str:
-  """Print the start and name of upcoming events (up to 10) on the user's calendar"""
-
-  # now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-  localTimeZone = userTimeZone(CLIENT_CITY)
-  now = currentTime(localTimeZone)
-  output = 'Getting the upcoming 10 events\n'
-  events_result = service.events().list(calendarId='primary', timeMin=now,
-                                              maxResults=10, singleEvents=True,
-                                              orderBy='startTime').execute()
-  events = events_result.get('items', [])
-  if not events:
-    return output + 'No upcoming events found.'
-
-  # Prints the start and name of the next 10 events
-  for event in events:
-    start = event['start'].get('dateTime', event['start'].get('date'))
-    output += str(event['summary']) + "\n" + f"   - Calendar Time Zone: {str(event['start']['timeZone'])}" + " " + str(start) + "\n" \
-            + f"   - Local Time Zone: {str(localTimeZone)}" + " " + str(convertTime(start, localTimeZone)) + "\n"
-  return output
-
-
-# upcomingEvents(service, "Guangzhou")
-events = upcomingEvents(service, "Guangzhou") 
-print(events) 

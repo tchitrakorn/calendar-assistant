@@ -6,7 +6,7 @@ const readCalendar = async (prompt) => {
         mode: 'text',
         // pythonPath: '/Users/karenwang/.virtualenvs/calendar-assistant/bin/python',  this will be the python path on the server
         pythonOptions: ['-u'], // get print results in real-time
-        scriptPath: 'python-scripts',
+        scriptPath: 'python_scripts',
     };
 
     try {
@@ -37,7 +37,7 @@ const writeCalendar = async (prompt) => {
         mode: 'text',
         // pythonPath: '/Users/karenwang/.virtualenvs/calendar-assistant/bin/python',  this will be the python path on the server
         pythonOptions: ['-u'], // get print results in real-time
-        scriptPath: 'python-scripts',
+        scriptPath: 'python_scripts',
     };
 
     try {

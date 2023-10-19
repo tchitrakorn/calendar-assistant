@@ -11,8 +11,8 @@ def run_script(script_path):
     return completed_process.stdout.strip()  # Return the script output
     
 # run_script('auth.py')
-# run_script('get_events.py')
+# run_script('manage_events.py')
 
-run_script('./python-scripts/auth.py')
-final_result = run_script('get_events.py')
+run_script('./python_scripts/auth.py')
+final_result = run_script('manage_events.py')
 print(final_result)  # This output can be captured by PythonShell
