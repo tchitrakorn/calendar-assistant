@@ -9,9 +9,9 @@ from oauth2client.client import OAuth2WebServerFlow
 
 def authorize():
     # User's Google Cloud Project Client ID & Client Secret/Key, and OpenAI API Key
-    CLIENT_ID = "899693603504-6s5v3a4lsv4t9n2pk0kvgm4v22vtvt53.apps.googleusercontent.com"
-    CLIENT_SECRET = "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"
-    OPENAI_API_KEY = "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"
+    CLIENT_ID = os.environ.get("CLIENT_ID")
+    CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
+    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
     # CLIENT_CITY = "Guangzhou"
 
