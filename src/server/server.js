@@ -1,9 +1,14 @@
 const express = require('express')
-const { body, matchedData, validationResult } = require('express-validator')
+const {
+  body,
+  query,
+  matchedData,
+  validationResult
+} = require('express-validator')
 const path = require('path')
 const bodyParser = require('body-parser')
 const itemController = require('../controllers/itemControllers')
-const db = require('../database/queries')
+const auth = require('./auth')
 
 const app = express()
 const port = 3000
@@ -88,34 +93,29 @@ app.post(
     const errors = validationResult(req)
     if (errors.isEmpty()) {
       const data = matchedData(req)
-      const results = db
-        .postUser(
+      return auth
+        .getUrl(
           data.email,
           data.clientId,
           data.clientSecret,
           data.openAIKey
         )
-        .then((resp) => resp)
-        .catch((error) => error)
-      return res.send(results)
+        .then((url) => res.send(url))
     }
     res.send({ errors: errors.array() })
   }
 )
 
 // Stores user secondary credential (access token)
-app.post(
-  '/credentials/access-token',
-  body(['email', 'accessToken']).notEmpty().escape(),
+app.get(
+  '/auth/callback',
+  query(['email', 'code']).notEmpty().escape(),
   (req, res) => {
     const errors = validationResult(req)
     if (errors.isEmpty()) {
       const data = matchedData(req)
-      const results = db
-        .postUserAccessToken(data.email, data.accessToken)
-        .then((resp) => resp)
-        .catch((error) => error)
-      return res.send(results)
+      const authResult = auth.getCredential(data.email, data.code)
+      return res.send(authResult)
     }
     res.send({ errors: errors.array() })
   }
