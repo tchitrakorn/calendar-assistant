@@ -2,8 +2,8 @@ const express = require('express')
 const { body, matchedData, validationResult } = require('express-validator')
 const path = require('path')
 const bodyParser = require('body-parser')
-const itemController = require('./src/controllers/itemControllers')
-const db = require('./src/database/queries')
+const itemController = require('../controllers/itemControllers')
+const db = require('../database/queries')
 
 const app = express()
 const port = 3000
