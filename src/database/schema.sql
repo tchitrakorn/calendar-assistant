@@ -13,7 +13,8 @@ CREATE TABLE users (
     client_secret   VARCHAR,
     openai_key      VARCHAR,
     access_token    VARCHAR,
-    refresh_token   VARCHAR
+    refresh_token   VARCHAR,
+    city            VARCHAR
 );
 
 CREATE TABLE events (
