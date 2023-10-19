@@ -2,7 +2,7 @@ const db = require('./connect.js')
 
 module.exports = {
   getUser: (email) => {
-    const queryString = 'SELECT id, name FROM users WHERE users.email = $1'
+    const queryString = 'SELECT * FROM users WHERE users.email = $1'
     const values = [email]
     return db.client
       .query(queryString, values)
