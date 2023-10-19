@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id              SERIAL      UNIQUE      PRIMARY KEY,
-    email           VARCHAR     NOT NULL,
+    email           VARCHAR     UNIQUE      NOT NULL,
     client_id       VARCHAR,
     client_secret   VARCHAR,
     openai_key      VARCHAR,
