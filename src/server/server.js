@@ -25,7 +25,7 @@ app.get('/track', body('prompt').notEmpty().escape(), (req, res) => {
     const response = itemController.track(data.prompt)
     return res.send(response)
   }
-  res.send({ errors: errors.array() })
+  res.status(500).send({ errors: errors.array() })
 })
 
 // Creates, modifies, or deletes an event based on user requirements
@@ -36,7 +36,7 @@ app.post('/manage', body('prompt').notEmpty().escape(), (req, res) => {
     const response = itemController.manage(data.prompt)
     return res.send(response)
   }
-  res.send({ errors: errors.array() })
+  res.status(500).send({ errors: errors.array() })
 })
 
 // Retrieves online information and personalized recommendations
@@ -47,7 +47,7 @@ app.get('/explore', body('prompt').notEmpty().escape(), (req, res) => {
     const response = itemController.explore(data.prompt)
     return res.send(response)
   }
-  res.send({ errors: errors.array() })
+  res.status(500).send({ errors: errors.array() })
 })
 
 // Retrieves non-sensitive information from users’ conversation log for Google Analytics
@@ -58,7 +58,7 @@ app.get('/analytics', body('prompt').notEmpty().escape(), (req, res) => {
     const response = itemController.getAnalytics(data.prompt)
     return res.send(response)
   }
-  res.send({ errors: errors.array() })
+  res.status(500).send({ errors: errors.array() })
 })
 
 // Retrieves user information
@@ -69,7 +69,7 @@ app.get('/data', body('prompt').notEmpty().escape(), (req, res) => {
     const response = itemController.getUserData(data.prompt)
     return res.send(response)
   }
-  res.send({ errors: errors.array() })
+  res.status(500).send({ errors: errors.array() })
 })
 
 // Stores/manages user information
@@ -80,7 +80,7 @@ app.post('/data', body('prompt').notEmpty().escape(), (req, res) => {
     const response = itemController.manageUserData(data.prompt)
     return res.send(response)
   }
-  res.send({ errors: errors.array() })
+  res.status(500).send({ errors: errors.array() })
 })
 
 // Stores user initial credentials (client ID, client secret, openAI key)
@@ -102,7 +102,7 @@ app.post(
         )
         .then((url) => res.send(url))
     }
-    res.send({ errors: errors.array() })
+    res.status(500).send({ errors: errors.array() })
   }
 )
 
@@ -117,7 +117,7 @@ app.get(
       const authResult = auth.getCredential(data.email, data.code)
       return res.send(authResult)
     }
-    res.send({ errors: errors.array() })
+    res.status(500).send({ errors: errors.array() })
   }
 )
 
