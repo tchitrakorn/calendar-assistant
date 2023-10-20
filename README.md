@@ -24,6 +24,14 @@ If you’re a developer who’s interested in running our code locally, feel fre
 cd calendar-assistant
 npm install
 ```
+We also recommend using a virtual environment to handle the python packages, which can be found in `requirements.txt`.
+
+### Setting up environment variables
+To avoid exposing secrets, we recommend creating a .env file using our .env.example:
+```
+cp .env.example .env
+```
+Then, fill in the fields in your .env file.
 
 ### Setting up PostgreSQL
 Start Postgres service and run the following:
@@ -49,6 +57,8 @@ For our server, database, and testing setup, Calendar Assistant primarily uses:
 * jest
 * pg
 
+For our calendar management logic, the python dependencies can be found in `requirements.txt`.
+
 For our natural language processing capabilities, Calendar Assistant primarily uses:
 * llama-index (for LLM and OpenAI)
   
@@ -60,6 +70,10 @@ Please see the following for additional information about LLM and LlamaIndex:
 
 ### Unit tests
 ```
+# To run all tests
+python -m unittest discover
+
+# To run with coverage
 coverage run -m unittest discover
 coverage report -m
 ```
