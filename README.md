@@ -44,8 +44,9 @@ Start Postgres service and run the following:
 
 ### Starting the server
 ```
-node src/server/server.js
+npm run server-dev
 ```
+The server should be running on http://localhost:3000.
 
 ## Dependencies and tools
 For our server, database, and testing setup, Calendar Assistant primarily uses:
