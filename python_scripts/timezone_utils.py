@@ -28,10 +28,10 @@ def userTimeZone(city_name:str):
 
 def currentTime(timeZone:str):
   """Get the current time based on a provided time zone"""
-  desired_timezone = pytz.timezone('Asia/Shanghai')
+  desired_timezone = pytz.timezone(timeZone)
   current_time = datetime.datetime.now(desired_timezone)
   current_time_str = current_time.isoformat()
-  print(current_time_str)
+  # print(current_time_str)
   return current_time_str
 
 def convertTime(original_datetime_str, \

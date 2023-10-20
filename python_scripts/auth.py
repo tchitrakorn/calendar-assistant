@@ -11,6 +11,7 @@ def authorize():
     # User's Google Cloud Project Client ID & Client Secret/Key, and OpenAI API Key
     CLIENT_ID = os.environ.get("CLIENT_ID")
     CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
+    # not used currently 
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
     # CLIENT_CITY = "Guangzhou"
