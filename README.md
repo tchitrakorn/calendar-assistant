@@ -80,7 +80,7 @@ coverage report -m
 ```
 
 ### System tests
-More on this later via Postman test cases!
+After you have started the server, you can go to our Postman test link [here](https://www.postman.com/speeding-crater-260064/workspace/team-workspace/collection/24382407-34a94ef6-8b55-4eab-a0ff-e8a120bcd9c9?action=share&creator=24382407) to test our API endpoints.
 
 ## Contributors
 * [Karen Wang](https://github.com/karenswang)
