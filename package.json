@@ -40,5 +40,8 @@
     "pg": "^8.11.3",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "python-shell": "^5.0.0"
   }
 }
