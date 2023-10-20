@@ -3,16 +3,14 @@ import os
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 from oauth2client.client import OAuth2WebServerFlow
 
 def authorize():
     # User's Google Cloud Project Client ID & Client Secret/Key, and OpenAI API Key
     CLIENT_ID = os.environ.get("CLIENT_ID")
     CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
-    # not used currently 
-    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+    # not used currently
+    # OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
     # CLIENT_CITY = "Guangzhou"
 
@@ -44,8 +42,10 @@ def authorize():
                 # Print Authorization URL
                 print("Please go to the following link in your browser and copy the authorization code:\n" \
                         + authorize_url)
-                # this is currently throwing an error since we can't accept input during script execution
-                # in later refinement we'll solve this by moving the authorization logic to separate endpoints
+                # this is currently throwing an error
+                # since we can't accept input during script execution
+                # in later refinement we'll solve this by moving
+                # the authorization logic to separate endpoints
                 auth_code = input("Enter your authorization code here:")
 
                 # Get credentials to build GSC API service
