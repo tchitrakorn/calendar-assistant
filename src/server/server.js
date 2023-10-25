@@ -9,7 +9,6 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const itemController = require('../controllers/itemControllers')
 const auth = require('./auth')
-const auth2 = require('./auth2')
 
 const app = express()
 const port = 3000
@@ -84,7 +83,6 @@ app.post('/data', body('prompt').notEmpty().escape(), (req, res) => {
   res.status(500).send({ errors: errors.array() })
 })
 
-
 // Stores client's info and authenticate clients
 app.post(
   '/authenticate',
@@ -95,56 +93,15 @@ app.post(
     const errors = validationResult(req)
     if (errors.isEmpty()) {
       const data = matchedData(req)
-      return auth2
+      return auth
         .authenticate(
           data.email,
           data.clientId,
           data.clientSecret,
           data.openAIKey
         )
-        .then((resp) => {
-          console.log(resp)
-          res.send('Successfully stored your credentials!')
-        })
+        .then((resp) => res.send('Successfully stored your credentials!'))
         .catch((err) => res.status(500).send({ errors: err }))
-    }
-    res.status(500).send({ errors: errors.array() })
-  }
-)
-
-// Stores user initial credentials (client ID, client secret, openAI key)
-app.post(
-  '/credentials',
-  body(['email', 'clientId', 'clientSecret', 'openAIKey'])
-    .notEmpty()
-    .escape(),
-  (req, res) => {
-    const errors = validationResult(req)
-    if (errors.isEmpty()) {
-      const data = matchedData(req)
-      return auth
-        .getUrl(
-          data.email,
-          data.clientId,
-          data.clientSecret,
-          data.openAIKey
-        )
-        .then((url) => res.send(url))
-    }
-    res.status(500).send({ errors: errors.array() })
-  }
-)
-
-// Stores user secondary credential (access token)
-app.get(
-  '/auth/callback',
-  query(['email', 'code']).notEmpty().escape(),
-  (req, res) => {
-    const errors = validationResult(req)
-    if (errors.isEmpty()) {
-      const data = matchedData(req)
-      const authResult = auth.getCredential(data.email, data.code)
-      return res.send(authResult)
     }
     res.status(500).send({ errors: errors.array() })
   }
