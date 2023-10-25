@@ -9,6 +9,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const itemController = require('../controllers/itemControllers')
 const auth = require('./auth')
+const auth2 = require('./auth2')
 
 const app = express()
 const port = 3000
@@ -82,6 +83,31 @@ app.post('/data', body('prompt').notEmpty().escape(), (req, res) => {
   }
   res.status(500).send({ errors: errors.array() })
 })
+
+
+// Stores client's info and authenticate clients
+app.post(
+  '/authenticate',
+  body(['email', 'clientId', 'clientSecret', 'openAIKey'])
+    .notEmpty()
+    .escape(),
+  (req, res) => {
+    const errors = validationResult(req)
+    if (errors.isEmpty()) {
+      const data = matchedData(req)
+      return auth2
+        .authenticate(
+          data.email,
+          data.clientId,
+          data.clientSecret,
+          data.openAIKey
+        )
+        .then(() => res.send('Successfully stored your credentials!'))
+        .catch((err) => res.status(500).send({ errors: err }))
+    }
+    res.status(500).send({ errors: errors.array() })
+  }
+)
 
 // Stores user initial credentials (client ID, client secret, openAI key)
 app.post(
