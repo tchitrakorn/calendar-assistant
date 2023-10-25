@@ -83,9 +83,9 @@ app.post('/data', body('prompt').notEmpty().escape(), (req, res) => {
   res.status(500).send({ errors: errors.array() })
 })
 
-// Stores user initial credentials (client ID, client secret, openAI key)
+// Stores client's info and authenticate clients
 app.post(
-  '/credentials',
+  '/authenticate',
   body(['email', 'clientId', 'clientSecret', 'openAIKey'])
     .notEmpty()
     .escape(),
@@ -94,28 +94,14 @@ app.post(
     if (errors.isEmpty()) {
       const data = matchedData(req)
       return auth
-        .getUrl(
+        .authenticate(
           data.email,
           data.clientId,
           data.clientSecret,
           data.openAIKey
         )
-        .then((url) => res.send(url))
-    }
-    res.status(500).send({ errors: errors.array() })
-  }
-)
-
-// Stores user secondary credential (access token)
-app.get(
-  '/auth/callback',
-  query(['email', 'code']).notEmpty().escape(),
-  (req, res) => {
-    const errors = validationResult(req)
-    if (errors.isEmpty()) {
-      const data = matchedData(req)
-      const authResult = auth.getCredential(data.email, data.code)
-      return res.send(authResult)
+        .then((resp) => res.send('Successfully stored your credentials!'))
+        .catch((err) => res.status(500).send({ errors: err }))
     }
     res.status(500).send({ errors: errors.array() })
   }
