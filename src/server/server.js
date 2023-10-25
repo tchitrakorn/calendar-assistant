@@ -102,7 +102,10 @@ app.post(
           data.clientSecret,
           data.openAIKey
         )
-        .then(() => res.send('Successfully stored your credentials!'))
+        .then((resp) => {
+          console.log(resp)
+          res.send('Successfully stored your credentials!')
+        })
         .catch((err) => res.status(500).send({ errors: err }))
     }
     res.status(500).send({ errors: errors.array() })
