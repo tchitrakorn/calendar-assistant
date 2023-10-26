@@ -105,7 +105,7 @@ app.get('/data', body('email').notEmpty().escape(), (req, res) => {
 })
 
 // Update client information
-app.post('/data/update', body('email').notEmpty().escape(), (req, res) => {
+app.patch('/data', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     const email = req.body.email
@@ -118,7 +118,7 @@ app.post('/data/update', body('email').notEmpty().escape(), (req, res) => {
 })
 
 // Delete client information
-app.post('/data/delete', body('email').notEmpty().escape(), (req, res) => {
+app.delete('/data', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     const data = matchedData(req)
