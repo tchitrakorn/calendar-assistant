@@ -20,7 +20,7 @@ def userTimeZone(city_name:str):
         # Get the time zone of the specified coordinates
         timezone_str = tz_finder.timezone_at(lat=latitude, lng=longitude)
         if timezone_str:
-            print(f"Time zone of {city_name}: {timezone_str}")
+            # print(f"Time zone of {city_name}: {timezone_str}")
             output = timezone_str
         else:
             print("Time zone not found for the provided coordinates.")

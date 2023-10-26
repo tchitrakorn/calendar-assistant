@@ -3,8 +3,8 @@ const dataModel = require('../models/dataModel')
 const db = require('../database/queries')
 
 // Calendar
-const track = (prompt) => {
-  return calendarModel.readCalendar(prompt)
+const track = async (email, prompt) => {
+  return await calendarModel.readCalendar(email, prompt);
 }
 
 const manage = (prompt) => {
