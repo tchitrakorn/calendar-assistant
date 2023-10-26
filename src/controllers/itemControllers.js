@@ -4,10 +4,12 @@ const db = require('../database/queries')
 
 // Calendar
 const track = async (email, prompt) => {
+    await db.logUserEvent(email, 'track', prompt)
     return await calendarModel.readCalendar(email, prompt)
 }
 
-const manage = (email, prompt, city) => {
+const manage = async (email, prompt, city) => {
+    await db.logUserEvent(email, 'manage', prompt)
     return calendarModel.writeCalendar(email, prompt, city)
 }
 
@@ -16,8 +18,8 @@ const explore = (prompt) => {
 }
 
 // User data
-const getAnalytics = (prompt) => {
-    return dataModel.readData(prompt)
+const getAnalytics = (email) => {
+    return dataModel.analyzeData(email)
 }
 
 const getUserData = (email) => {

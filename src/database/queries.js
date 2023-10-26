@@ -57,5 +57,22 @@ module.exports = {
             .query(queryString, values)
             .then((results) => results.rows)
             .catch((error) => error)
+    },
+    logUserEvent: (email, eventType, prompt) => {
+        const queryString = 'INSERT INTO events (email, event_type, prompt) \
+        VALUES ($1, $2, $3)'
+        const values = [email, eventType, prompt]
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
+    },
+    getUserEvents: (email) => {
+        const queryString = 'SELECT * FROM events WHERE events.email = $1'
+        const values = [email]
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
     }
 }

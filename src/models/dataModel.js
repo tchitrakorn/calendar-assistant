@@ -2,6 +2,17 @@ const db = require('../database/queries')
 
 // Models for user-related data from our database
 
+const analyzeData = async (email) => {
+  const events = await db.getUserEvents(email)
+  const filteredEvents = events.map((event) => {
+    return {
+      eventType: event.event_type,
+      prompt: event.prompt,
+    }
+  })
+  return filteredEvents
+}
+
 const readData = (email) => {
   return db.getUser(email)
     .then(res => res)
@@ -21,6 +32,7 @@ const deleteData = (email) => {
 }
 
 module.exports = {
+  analyzeData,
   readData,
   writeData,
   deleteData
