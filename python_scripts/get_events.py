@@ -54,7 +54,6 @@ def upcomingEvents()-> str:
 
 # Initialize agent with tools available to use and a specific LLM
 upcomingEvents_tool = FunctionTool.from_defaults(fn=upcomingEvents)
-# createEvent_tool = FunctionTool.from_defaults(fn=createEvent)
 
 system_prompt = "When reporting event times, use the local time zone corresponding to the user's city."
 llm = OpenAI(model = "gpt-3.5-turbo", temperature = 0.2, \

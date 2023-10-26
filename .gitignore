@@ -5,3 +5,4 @@
 .DS_Store
 
 .env
+python_scripts/__pycache__/timezone_utils.cpython-311.pyc

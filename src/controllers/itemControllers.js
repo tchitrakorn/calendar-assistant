@@ -7,8 +7,8 @@ const track = async (email, prompt) => {
   return await calendarModel.readCalendar(email, prompt)
 }
 
-const manage = (prompt) => {
-  return calendarModel.writeCalendar(prompt)
+const manage = (email, prompt, city) => {
+  return calendarModel.writeCalendar(email, prompt, city)
 }
 
 const explore = (prompt) => {
