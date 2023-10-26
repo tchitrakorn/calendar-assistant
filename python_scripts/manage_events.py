@@ -1,24 +1,18 @@
 # Import required packages
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 from llama_index.tools import FunctionTool
 from llama_index.llms import OpenAI
-from llama_index.agent import ReActAgent, OpenAIAgent
-import sys
+from llama_index.agent import ReActAgent
 
-from oauth2client.client import OAuth2WebServerFlow
 from googleapiclient.discovery import build
-import httplib2, datetime, textwrap, os, json
+import datetime, textwrap, sys
 
-from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.errors import HttpError
 
-from geopy.geocoders import Nominatim
-from timezonefinder import TimezoneFinder
 import pytz
 
-from python_scripts.timezone_utils import convertTime, userTimeZone, calendarTimeZone
+from timezone_utils import convertTime, userTimeZone, calendarTimeZone
 
 client_id = sys.argv[1]
 client_secret = sys.argv[2]
@@ -26,6 +20,7 @@ access_token = sys.argv[3]
 refresh_token = sys.argv[4]
 openai_key = sys.argv[5]
 city = sys.argv[6]
+prompt = sys.argv[7]
 
 credentials = Credentials(
             token=access_token,
@@ -106,5 +101,5 @@ def wrap_text(string, width=60):
   return formatted_text
 
 
-ans = agent.chat("Create an event at 2pm on Oct 26, 2023 for group project discussion with Guest 1 <karen.wang@columbia.edu>, Guest 2 <karenwang97@outlook.com>.")
+ans = agent.chat(prompt)
 print(wrap_text(ans.response))

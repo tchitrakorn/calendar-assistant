@@ -56,7 +56,7 @@ app.post('/manage', [
 
   try {
     const data = matchedData(req)
-    const response = await itemController.track(data.email, data.prompt)
+    const response = await itemController.manage(data.email, data.prompt)
     // Check if the response is what you expect, for example, not null or undefined
     if (response) {
       return res.send(response)
