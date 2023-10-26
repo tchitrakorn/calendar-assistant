@@ -32,10 +32,6 @@ const deleteUserData = (email) => {
     return dataModel.deleteData(email);
 }
 
-const storeCredentials = (email, clientId, clientSecret, openAIKey) => {
-    return db.postUser(email, clientId, clientSecret, openAIKey)
-}
-
 module.exports = {
     track,
     manage,
@@ -43,6 +39,5 @@ module.exports = {
     getAnalytics,
     getUserData,
     manageUserData,
-    storeCredentials,
     deleteUserData
 }

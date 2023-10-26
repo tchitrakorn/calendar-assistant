@@ -95,38 +95,50 @@ app.get('/analytics', body('prompt').notEmpty().escape(), (req, res) => {
 // Retrieves user information
 app.get('/data', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
-  if (errors.isEmpty()) {
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() }) // Bad input
+  }
+  try {
     const data = matchedData(req)
     return itemController.getUserData(data.email)
       .then((resp) => res.send(resp))
       .catch((err) => res.status(500).send({ errors: err }))
+  } catch (error) {
+    res.status(500).send({ errors: errors.array() }) // Internal server errors
   }
-  res.status(500).send({ errors: errors.array() })
 })
 
 // Update client information
 app.patch('/data', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
-  if (errors.isEmpty()) {
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() }) // Bad input
+  }
+  try {
     const email = req.body.email
     delete req.body.email
     return itemController.manageUserData(email, req.body)
-      .then((resp) => res.send('Successfully updated your data in our database!'))
+      .then(() => res.send('Successfully updated your data in our database!'))
       .catch((err) => res.status(500).send({ errors: err }))
+  } catch (error) {
+    res.status(500).send({ errors: errors.array() }) // Internal server errors
   }
-  res.status(500).send({ errors: errors.array() })
 })
 
 // Delete client information
 app.delete('/data', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
-  if (errors.isEmpty()) {
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() }) // Bad input
+  }
+  try {
     const data = matchedData(req)
     return itemController.deleteUserData(data.email)
-      .then((resp) => res.send('Successfully deleted your data from our database!'))
+      .then(() => res.send('Successfully deleted your data from our database!'))
       .catch((err) => res.status(500).send({ errors: err }))
+  } catch (error) {
+    res.status(500).send({ errors: errors.array() }) // Internal server errors
   }
-  res.status(500).send({ errors: errors.array() })
 })
 
 // Stores client's info and authenticate clients
@@ -137,7 +149,10 @@ app.post(
     .escape(),
   (req, res) => {
     const errors = validationResult(req)
-    if (errors.isEmpty()) {
+    if (!errors.isEmpty()) {
+      return res.status(400).send({ errors: errors.array() }) // Bad input
+    }
+    try {
       const data = matchedData(req)
       return auth
         .authenticate(
@@ -146,10 +161,11 @@ app.post(
           data.clientSecret,
           data.openAIKey
         )
-        .then((resp) => res.send('Successfully stored your credentials!'))
+        .then(() => res.send('Successfully stored your credentials!'))
         .catch((err) => res.status(500).send({ errors: err }))
+    } catch (error) {
+      res.status(500).send({ errors: errors.array() }) // Internal server errors
     }
-    res.status(500).send({ errors: errors.array() })
   }
 )
 
