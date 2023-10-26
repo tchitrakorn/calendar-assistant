@@ -1,19 +1,43 @@
-import datetime
-from typing import List, Optional, Union
+# Import required packages
+from typing import Any, List, Optional, Union
+from llama_index.tools import FunctionTool
+from llama_index.llms import OpenAI
+from llama_index.agent import ReActAgent, OpenAIAgent
+import sys
 
-import pytz
-from google.oauth2.credentials import Credentials
+from oauth2client.client import OAuth2WebServerFlow
 from googleapiclient.discovery import build
+import httplib2, datetime, textwrap, os, json
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.errors import HttpError
+
+from geopy.geocoders import Nominatim
+from timezonefinder import TimezoneFinder
+import pytz
 
 from python_scripts.timezone_utils import convertTime, userTimeZone, calendarTimeZone
 
-CLIENT_CITY = "Los Angeles" #using a placeholder city for now
-with open('credentials.json', 'r') as token_file:
-    creds = Credentials.from_authorized_user_file('credentials.json')
+client_id = sys.argv[1]
+client_secret = sys.argv[2]
+access_token = sys.argv[3]
+refresh_token = sys.argv[4]
+openai_key = sys.argv[5]
+city = sys.argv[6]
+
+credentials = Credentials(
+            token=access_token,
+            refresh_token=refresh_token,
+            token_uri="http://localhost:8080/oauth2callback", 
+            client_id=client_id,
+            client_secret=client_secret,
+        )
 
 try:
-    service = build('calendar', 'v3', credentials=creds)
+    service = build('calendar', "v3", credentials=credentials)
+    # print("Successfully connected to Google Calendar API")
 except HttpError as error:
     print("An error occurred: ", error)
 
@@ -34,7 +58,7 @@ def createEvent(summary: Optional[str] = None, \
         end_datetime Optional[Union[str, datetime.datetime]]: The end datetime for the event
         attendees Optional[List[str]]: A list of email address to invite to the event
     """
-    localTimeZone = userTimeZone(CLIENT_CITY)
+    localTimeZone = userTimeZone(city)
     local_tz = pytz.timezone(localTimeZone)
 
     attendees_list = []
@@ -68,4 +92,19 @@ def createEvent(summary: Optional[str] = None, \
     event = service.events().insert(calendarId="primary", body=event).execute()
     return "Your calendar event has been created successfully!"
 
-createEvent(summary="Test Event")
+# Initialize agent with tools available to use and a specific LLM
+createEvent_tool = FunctionTool.from_defaults(fn=createEvent)
+
+system_prompt = "When reporting event times, use the local time zone corresponding to the user's city."
+llm = OpenAI(model = "gpt-3.5-turbo", temperature = 0.2, \
+             api_key = openai_key, system_prompt = system_prompt)
+agent = ReActAgent.from_tools([createEvent_tool], llm=llm, verbose=False)
+
+def wrap_text(string, width=60):
+  wrapped_text = textwrap.wrap(string, width=width)
+  formatted_text = '\n'.join(wrapped_text)
+  return formatted_text
+
+
+ans = agent.chat("Create an event at 2pm on Oct 26, 2023 for group project discussion with Guest 1 <karen.wang@columbia.edu>, Guest 2 <karenwang97@outlook.com>.")
+print(wrap_text(ans.response))

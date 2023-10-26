@@ -44,14 +44,30 @@ app.get('/track', [
 })
 
 // Creates, modifies, or deletes an event based on user requirements
-app.post('/manage', body('prompt').notEmpty().escape(), (req, res) => {
+app.post('/manage', [
+  body('email').notEmpty().escape(),
+  body('prompt').notEmpty().escape(),
+  body('city').notEmpty().escape()
+], async (req, res) => {
   const errors = validationResult(req)
-  if (errors.isEmpty()) {
-    const data = matchedData(req)
-    const response = itemController.manage(data.prompt)
-    return res.send(response)
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() }) // 400 for bad input
   }
-  res.status(500).send({ errors: errors.array() })
+
+  try {
+    const data = matchedData(req)
+    const response = await itemController.track(data.email, data.prompt)
+    // Check if the response is what you expect, for example, not null or undefined
+    if (response) {
+      return res.send(response)
+    } else {
+      // Handle the case when response is not what you expect
+      return res.status(500).send({ error: 'Unexpected response' })
+    }
+  } catch (error) {
+    console.error(error)
+    return res.status(500).send({ error: error.message }) // Internal Server Error for other cases
+  }
 })
 
 // Retrieves online information and personalized recommendations
