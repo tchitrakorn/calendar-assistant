@@ -12,7 +12,14 @@ const writeData = (prompt) => {
   return 'write user data response'
 }
 
+const deleteData = (email) => {
+  return db.deleteUser(email)
+    .then(res => res)
+    .catch(err => err)
+}
+
 module.exports = {
   readData,
-  writeData
+  writeData,
+  deleteData
 }

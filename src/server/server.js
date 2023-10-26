@@ -122,8 +122,9 @@ app.post('/data/delete', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     const data = matchedData(req)
-    const response = itemController.deleteUserData(data.prompt)
-    return res.send(response)
+    return itemController.deleteUserData(data.email)
+      .then((resp) => res.send('Successfully deleted your data from our database!'))
+      .catch((err) => res.status(500).send({ errors: err }))
   }
   res.status(500).send({ errors: errors.array() })
 })

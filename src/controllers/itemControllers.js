@@ -28,6 +28,10 @@ const manageUserData = (prompt) => {
     return dataModel.writeData(prompt)
 }
 
+const deleteUserData = (email) => {
+    return dataModel.deleteData(email);
+}
+
 const storeCredentials = (email, clientId, clientSecret, openAIKey) => {
     return db.postUser(email, clientId, clientSecret, openAIKey)
 }
@@ -39,5 +43,6 @@ module.exports = {
     getAnalytics,
     getUserData,
     manageUserData,
-    storeCredentials
+    storeCredentials,
+    deleteUserData
 }

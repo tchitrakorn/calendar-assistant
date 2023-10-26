@@ -33,5 +33,13 @@ module.exports = {
             .query(queryString, values)
             .then((results) => results.rows)
             .catch((error) => error)
+    },
+    deleteUser: (email) => {
+        const queryString = 'DELETE FROM users WHERE users.email = $1'
+        const values = [email]
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
     }
 }
