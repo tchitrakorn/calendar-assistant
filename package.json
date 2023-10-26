@@ -46,7 +46,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "python-shell": "^5.0.0"
   }
 }
