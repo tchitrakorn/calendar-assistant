@@ -21,7 +21,7 @@ const readCalendar = async (email, prompt) => {
       // pythonPath: '/Users/karenwang/.virtualenvs/calendar-assistant/bin/python',  this will be the python path on the server
       pythonOptions: ['-u'], // get print results in real-time
       scriptPath: 'python_scripts',
-      args: [client_id, client_secret, access_token, refresh_token, openai_key]
+      args: [client_id, client_secret, access_token, refresh_token, openai_key, prompt]
     }
 
     // Execute the Python script and capture the output
