@@ -4,7 +4,7 @@ const db = require('../database/queries')
 
 // Calendar
 const track = async (email, prompt) => {
-  return await calendarModel.readCalendar(email, prompt);
+  return await calendarModel.readCalendar(email, prompt)
 }
 
 const manage = (prompt) => {

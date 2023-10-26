@@ -15,6 +15,7 @@ client_secret = sys.argv[2]
 access_token = sys.argv[3]
 refresh_token = sys.argv[4]
 openai_key = sys.argv[5]
+prompt = sys.argv[6]
 
 credentials = Credentials(
             token=access_token,
@@ -67,5 +68,5 @@ def wrap_text(string, width=60):
   formatted_text = '\n'.join(wrapped_text)
   return formatted_text
 
-ans = agent.chat("what is my upcoming events")
+ans = agent.chat(prompt)
 print(wrap_text(ans.response))
