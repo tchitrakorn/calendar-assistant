@@ -8,9 +8,11 @@ To use our service, please make sure that you have obtained the following creden
 3. OpenAI API key
    
 To obtain the first two items, please visit [this site](https://developers.google.com/calendar/api/quickstart/python).
-Make sure to choose a desktop app and note down your credentials.
+Make sure to choose a __web app__ and note down your credentials. 
 
-To obtain the last item, please visit [this site](https://platform.openai.com/docs/quickstart/add-your-api-key?context=python).
+Next, go to APIs & Services -> Credentials, find the app you just created, add `http://localhost:8080/oauth2callback` to its "Authorized redirect URIs." This would allow our /authenticate API endpoint to redirect you correctly. 
+
+To obtain the OpenAI key, please visit [this site](https://platform.openai.com/docs/quickstart/add-your-api-key?context=python). Note that you need to have remaining credit on your account.
 
 For more information on how to use our API, please see the following:
 * [Full documentation](https://app.swaggerhub.com/apis-docs/Divide-n-Conquer/calendar-assistant/1.0.0)
@@ -58,7 +60,7 @@ For our server, database, and testing setup, Calendar Assistant primarily uses:
 * jest
 * pg
 
-For our calendar management logic, the python dependencies can be found in `requirements.txt`.
+For our calendar management logic, the python dependencies can be found in `requirements.txt`. We recommend having a virtual environment and do a `pip install -r requirements.txt`.
 
 For our natural language processing capabilities, Calendar Assistant primarily uses:
 * llama-index (for LLM and OpenAI)
