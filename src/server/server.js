@@ -93,22 +93,36 @@ app.get('/analytics', body('prompt').notEmpty().escape(), (req, res) => {
 })
 
 // Retrieves user information
-app.get('/data', body('prompt').notEmpty().escape(), (req, res) => {
+app.get('/data', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     const data = matchedData(req)
-    const response = itemController.getUserData(data.prompt)
+    return itemController.getUserData(data.email)
+      .then((resp) => res.send(resp))
+      .catch((err) => res.status(500).send({ errors: err }))
+  }
+  res.status(500).send({ errors: errors.array() })
+})
+
+// Manage client information
+app.post('/data/manage', body('email').notEmpty().escape(), (req, res) => {
+  const errors = validationResult(req)
+  if (errors.isEmpty()) {
+    const data = matchedData(req)
+    console.log(data)
+    console.log(Object.keys(data))
+    const response = itemController.manageUserData(data)
     return res.send(response)
   }
   res.status(500).send({ errors: errors.array() })
 })
 
-// Stores/manages user information
-app.post('/data', body('prompt').notEmpty().escape(), (req, res) => {
+// Delete client information
+app.post('/data/delete', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     const data = matchedData(req)
-    const response = itemController.manageUserData(data.prompt)
+    const response = itemController.deleteUserData(data.prompt)
     return res.send(response)
   }
   res.status(500).send({ errors: errors.array() })

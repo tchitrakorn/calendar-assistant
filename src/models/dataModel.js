@@ -1,7 +1,11 @@
+const db = require('../database/queries')
+
 // Models for user-related data from our database
 
-const readData = (prompt) => {
-  return 'read user data response'
+const readData = (email) => {
+  return db.getUser(email)
+    .then(res => res)
+    .catch(err => err)
 }
 
 const writeData = (prompt) => {
