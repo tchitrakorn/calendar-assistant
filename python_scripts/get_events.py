@@ -59,15 +59,13 @@ system_prompt = "When reporting event times, use the local time zone correspondi
 llm = OpenAI(model = "gpt-3.5-turbo", temperature = 0.2, \
              api_key = openai_key, system_prompt = system_prompt)
 
-agent = ReActAgent.from_tools([upcomingEvents_tool], llm=llm, verbose=True)
+agent = ReActAgent.from_tools([upcomingEvents_tool], llm=llm, verbose=False)
 
 
 def wrap_text(string, width=60):
   wrapped_text = textwrap.wrap(string, width=width)
   formatted_text = '\n'.join(wrapped_text)
   return formatted_text
-# upcomingEvents(service, "Guangzhou")
-# events = upcomingEvents(service, "New York")
-# print(events)
 
 ans = agent.chat("what is my upcoming events")
+print(wrap_text(ans.response))
