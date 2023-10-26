@@ -82,14 +82,19 @@ app.get('/explore', body('prompt').notEmpty().escape(), (req, res) => {
 })
 
 // Retrieves non-sensitive information from users’ conversation log for Google Analytics
-app.get('/analytics', body('prompt').notEmpty().escape(), (req, res) => {
+app.get('/analytics', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
-  if (errors.isEmpty()) {
-    const data = matchedData(req)
-    const response = itemController.getAnalytics(data.prompt)
-    return res.send(response)
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() }) // Bad input
   }
-  res.status(500).send({ errors: errors.array() })
+  try {
+    const data = matchedData(req)
+    return itemController.getAnalytics(data.email)
+      .then((resp) => res.send(resp))
+      .catch((err) => res.status(500).send({ errors: err }))
+  } catch (error) {
+    res.status(500).send({ errors: errors.array() }) // Internal server errors
+  }
 })
 
 // Retrieves user information
