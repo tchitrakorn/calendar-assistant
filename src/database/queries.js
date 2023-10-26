@@ -33,5 +33,29 @@ module.exports = {
             .query(queryString, values)
             .then((results) => results.rows)
             .catch((error) => error)
+    },
+    deleteUser: (email) => {
+        const queryString = 'DELETE FROM users WHERE users.email = $1'
+        const values = [email]
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
+    },
+    updateUser: (email, fieldsToUpdate) => {
+        const fieldValuePairs = []
+        const values = [email]
+        let fieldIndex = 2 // first index belongs to the email field
+        for (const [field, value] of Object.entries(fieldsToUpdate)) {
+            fieldValuePairs.push(field + ' = $' + fieldIndex)
+            values.push(value)
+            fieldIndex++
+        }
+        const fieldValueString = fieldValuePairs.join(', ')
+        const queryString = `UPDATE users SET ${fieldValueString} WHERE users.email = $1`
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
     }
 }
