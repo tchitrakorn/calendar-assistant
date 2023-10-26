@@ -24,8 +24,8 @@ const getUserData = (email) => {
     return dataModel.readData(email)
 }
 
-const manageUserData = (prompt) => {
-    return dataModel.writeData(prompt)
+const manageUserData = (email, fieldsToUpdate) => {
+    return dataModel.writeData(email, fieldsToUpdate)
 }
 
 const deleteUserData = (email) => {

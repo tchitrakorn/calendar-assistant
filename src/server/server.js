@@ -104,15 +104,15 @@ app.get('/data', body('email').notEmpty().escape(), (req, res) => {
   res.status(500).send({ errors: errors.array() })
 })
 
-// Manage client information
-app.post('/data/manage', body('email').notEmpty().escape(), (req, res) => {
+// Update client information
+app.post('/data/update', body('email').notEmpty().escape(), (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
-    const data = matchedData(req)
-    console.log(data)
-    console.log(Object.keys(data))
-    const response = itemController.manageUserData(data)
-    return res.send(response)
+    const email = req.body.email
+    delete req.body.email
+    return itemController.manageUserData(email, req.body)
+      .then((resp) => res.send('Successfully updated your data in our database!'))
+      .catch((err) => res.status(500).send({ errors: err }))
   }
   res.status(500).send({ errors: errors.array() })
 })

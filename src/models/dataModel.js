@@ -8,8 +8,10 @@ const readData = (email) => {
     .catch(err => err)
 }
 
-const writeData = (prompt) => {
-  return 'write user data response'
+const writeData = (email, fieldsToUpdate) => {
+  return db.updateUser(email, fieldsToUpdate)
+    .then(res => res)
+    .catch(err => err)
 }
 
 const deleteData = (email) => {
