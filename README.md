@@ -27,6 +27,13 @@ cd calendar-assistant
 npm install
 ```
 We also recommend using a virtual environment to handle the python packages, which can be found in `requirements.txt`.
+Example:
+```
+pip install virtualenv
+python<version> -m venv <virtual-environment-name>  # inside the project directory
+source env/bin/activate  # activate the virtual environment
+pip install -r requirements.txt  # install required dependencies
+```
 
 ### Setting up environment variables
 To avoid exposing secrets, we recommend creating a .env file using our .env.example:
@@ -41,8 +48,16 @@ Start Postgres service and run the following:
 `psql -U your_username -d your_database`
 2. Run our schema file: 
 `\i src/database/schema.sql`
-3. To quit Postgres: 
+3. Check records in our two tables:
+`SELECT * FROM users;`
+`SELECT * FROM events;`
+5. To quit Postgres: 
 `\q`
+
+Additional notes:
+* You only need to run `\i src/database/schema.sql` once unless there's an update in your schema.
+* If you make any changes to the schema, you may encounter a drop error when running this script. Please make sure to drop tables in the reverse order of key dependencies (i.e., If A depends on B, drop A first before dropping B). Do so by running: `DROP TABLE {TableA};`.
+* Read more on [PostgreSQL](https://www.postgresql.org/docs/current/index.html) and [SQL commands](https://www.postgresql.org/docs/current/sql-commands.html).
 
 ### Starting the server
 ```
