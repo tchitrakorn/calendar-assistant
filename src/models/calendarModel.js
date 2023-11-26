@@ -12,7 +12,7 @@ const readCalendar = async (email, prompt) => {
     }
     const user = userArray[0]
 
-    const { id, email: userEmail, client_id, client_secret, openai_key, access_token, refresh_token, city} = user;
+    const { id, email: userEmail, client_id, client_secret, openai_key, access_token, refresh_token, city} = user
     // console.log('Access Token:', access_token);  // Log the individual properties
     // console.log('Client ID:', client_id);
 

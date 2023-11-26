@@ -7,7 +7,7 @@ const analyzeData = async (email) => {
   const filteredEvents = events.map((event) => {
     return {
       eventType: event.event_type,
-      prompt: event.prompt,
+      prompt: event.prompt
     }
   })
   return filteredEvents

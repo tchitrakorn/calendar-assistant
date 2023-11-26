@@ -1,3 +1,4 @@
+const cors = require('cors')
 const express = require('express')
 const {
   body,
@@ -11,6 +12,7 @@ const itemController = require('../controllers/itemControllers')
 const auth = require('./auth')
 
 const app = express()
+app.use(cors())
 const port = 3000
 
 app.use(bodyParser.urlencoded({ extended: false }))
