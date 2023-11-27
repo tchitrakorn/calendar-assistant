@@ -46,6 +46,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@google-cloud/local-auth": "^3.0.0",
     "cors": "^2.8.5",
     "node-fetch": "^2.6.1",
     "python-shell": "^5.0.0"
