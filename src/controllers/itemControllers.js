@@ -3,9 +3,9 @@ const dataModel = require('../models/dataModel')
 const db = require('../database/queries')
 
 // Calendar
-const track = async (email, prompt) => {
-    await db.logUserEvent(email, 'track', prompt)
-    return await calendarModel.readCalendar(email, prompt)
+const track = async (request) => {
+    // await db.logUserEvent(request.email, 'track', request)
+    return await calendarModel.readCalendar(request)
 }
 
 const manage = async (email, prompt, city) => {

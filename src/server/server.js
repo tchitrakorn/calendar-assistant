@@ -10,6 +10,7 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const itemController = require('../controllers/itemControllers')
 const auth = require('./auth')
+const v = require('./validation.js')
 
 const app = express()
 app.use(cors())
@@ -21,17 +22,18 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 
 // Answers questions related to the user's current calendar
 app.get('/track', [
-  body('email').notEmpty().escape(),
-  body('prompt').notEmpty().escape()
+  body('email').notEmpty().escape()
 ], async (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).send({ errors: errors.array() }) // 400 for bad input
+  const expressValidatorErrors = validationResult(req)
+  if (!expressValidatorErrors.isEmpty()) {
+    return res.status(400).send({ errors: expressValidatorErrors.array() }) // 400 for bad input
   }
-
+  const validationErrors = v.validateTrackRequest(req.body)
+  if (validationErrors.lenght > 0) {
+    return res.status(400).send({ errors: validationErrors }) // 400 for bad input
+  }
   try {
-    const data = matchedData(req)
-    const response = await itemController.track(data.email, data.prompt)
+    const response = await itemController.track(req.body)
     // Check if the response is what you expect, for example, not null or undefined
     if (response) {
       return res.send(response)
