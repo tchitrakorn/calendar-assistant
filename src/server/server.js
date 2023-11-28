@@ -22,14 +22,15 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 
 // Answers questions related to the user's current calendar
 app.get('/track', [
-  body('email').notEmpty().escape()
+  body('email').notEmpty().escape(),
+  body('type').notEmpty().escape()
 ], async (req, res) => {
   const expressValidatorErrors = validationResult(req)
   if (!expressValidatorErrors.isEmpty()) {
     return res.status(400).send({ errors: expressValidatorErrors.array() }) // 400 for bad input
   }
   const validationErrors = v.validateTrackRequest(req.body)
-  if (validationErrors.lenght > 0) {
+  if (validationErrors.length > 0) {
     return res.status(400).send({ errors: validationErrors }) // 400 for bad input
   }
   try {
@@ -49,18 +50,18 @@ app.get('/track', [
 
 // Creates, modifies, or deletes an event based on user requirements
 app.post('/manage', [
-  body('email').notEmpty().escape(),
-  body('prompt').notEmpty().escape(),
-  body('city').notEmpty().escape()
+  body('email').notEmpty().escape()
 ], async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() }) // 400 for bad input
   }
-
+  const validationErrors = v.validateManageRequest(req.body)
+  if (validationErrors.length > 0) {
+    return res.status(400).send({ errors: validationErrors }) // 400 for bad input
+  }
   try {
-    const data = matchedData(req)
-    const response = await itemController.manage(data.email, data.prompt)
+    const response = await itemController.manage(req.body)
     // Check if the response is what you expect, for example, not null or undefined
     if (response) {
       return res.send(response)
