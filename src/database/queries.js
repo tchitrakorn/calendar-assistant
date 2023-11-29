@@ -25,6 +25,25 @@ module.exports = {
             .then((results) => results.rows)
             .catch((error) => error)
     },
+    postUsersOrgs: (email, orgId) => {
+        const queryString =
+            'INSERT INTO usersOrgs (email, org_id) \
+            VALUES ($1, $2)'
+        const values = [email, orgId]
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
+    },
+    getUsersOrgs: (email) => {
+        const queryString =
+            'SELECT org_id FROM usersOrgs WHERE usersOrgs.email = $1'
+        const values = [email]
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
+    },
     postUserAccessToken: (email, accessToken) => {
         const queryString =
             'INSERT INTO users (access_token) VALUES ($1) WHERE users.email = $2'
@@ -58,10 +77,10 @@ module.exports = {
             .then((results) => results.rows)
             .catch((error) => error)
     },
-    logUserEvent: (email, eventType, prompt) => {
-        const queryString = 'INSERT INTO events (email, event_type, prompt) \
+    logUserEvent: (email, eventType, orgId) => {
+        const queryString = 'INSERT INTO events (email, event_type, org_id) \
         VALUES ($1, $2, $3)'
-        const values = [email, eventType, prompt]
+        const values = [email, eventType, orgId]
         return db.client
             .query(queryString, values)
             .then((results) => results.rows)

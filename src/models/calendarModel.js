@@ -13,7 +13,7 @@ const readCalendar = async (request) => {
             throw new Error('User not found')
         }
         const user = userArray[0]
-        const { id, email: userEmail, client_id, client_secret, openai_key, access_token, refresh_token, city } = user
+        const { id, email: userEmail, org_id, client_id, client_secret, openai_key, access_token, refresh_token, city } = user
         const credentials = {
             type: 'authorized_user',
             client_id: client_id,
@@ -43,7 +43,7 @@ const readCalendarDeprecated = async (email, prompt) => {
         }
         const user = userArray[0]
 
-        const { id, email: userEmail, client_id, client_secret, openai_key, access_token, refresh_token, city } = user
+        const { id, email: userEmail, org_id, client_id, client_secret, openai_key, access_token, refresh_token, city } = user
         // console.log('Access Token:', access_token);  // Log the individual properties
         // console.log('Client ID:', client_id);
 
@@ -96,7 +96,7 @@ const writeCalendar = async (request) => {
         }
         const user = userArray[0]
 
-        const { id, email: userEmail, client_id, client_secret, openai_key, access_token, refresh_token, city: userCity } = user
+        const { id, email: userEmail, org_id, client_id, client_secret, openai_key, access_token, refresh_token, city: userCity } = user
         const credentials = {
             type: 'authorized_user',
             client_id: client_id,
