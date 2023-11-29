@@ -22,7 +22,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 
 // Answers questions related to the user's current calendar
 app.get('/track', [
-  body('email').notEmpty().escape(),
+  body('email').isEmail().normalizeEmail(),
   body('orgId').notEmpty().escape()
 ], async (req, res) => {
   const expressValidatorErrors = validationResult(req)
@@ -50,7 +50,7 @@ app.get('/track', [
 
 // Creates, modifies, or deletes an event based on user requirements
 app.post('/manage', [
-  body('email').notEmpty().escape(),
+  body('email').isEmail().normalizeEmail(),
   body('type').notEmpty().escape(),
   body('orgId').notEmpty().escape()
 ], async (req, res) => {
@@ -156,14 +156,18 @@ app.delete('/data', body('email').notEmpty().escape(), (req, res) => {
 // Stores client's info and authenticate clients
 app.post(
   '/authenticate',
-  body(['email', 'clientId', 'clientSecret', 'openAIKey', 'orgId'])
-    .notEmpty()
-    .escape(),
+  [
+    body(['email', 'clientId', 'clientSecret', 'openAIKey', 'orgId']).notEmpty().escape(),
+    body('email').isEmail().normalizeEmail()
+  ],
   (req, res) => {
-    //console.log(req.body)
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(400).send({ errors: errors.array() }) // Bad input
+    }
+    const validationErrors = v.validateAuthenticateRequest(req.body)
+    if (validationErrors.length > 0) {
+      return res.status(400).send({ errors: validationErrors }) // 400 for bad input
     }
     try {
       const data = matchedData(req)
@@ -175,7 +179,10 @@ app.post(
           data.openAIKey,
           data.orgId
         )
-        .then(() => res.send('Successfully stored your credentials!'))
+        .then(() => res.send({
+          action: 'authenticate',
+          status: 'success'
+        }))
         .catch((err) => res.status(500).send({ errors: err }))
     } catch (error) {
       res.status(500).send({ errors: errors.array() }) // Internal server errors
