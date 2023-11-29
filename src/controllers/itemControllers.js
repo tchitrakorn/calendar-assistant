@@ -1,6 +1,7 @@
 const calendarModel = require('../models/calendarModel')
 const dataModel = require('../models/dataModel')
 const db = require('../database/queries')
+const { request } = require('express')
 
 // Calendar
 const track = async (request) => {
@@ -13,8 +14,8 @@ const manage = async (request) => {
     return calendarModel.writeCalendar(request)
 }
 
-const explore = (prompt) => {
-    return calendarModel.readCalendar(prompt)
+const explore = (request) => {
+    return calendarModel.readCalendar(request)
 }
 
 // User data

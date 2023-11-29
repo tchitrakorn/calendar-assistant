@@ -43,7 +43,38 @@ const validateManageRequest = (request) => {
     return errors
 }
 
+
+
+const validateExplorePreferences = (preferences) => {
+    if (!preferences) {
+      throw new Error('Preferences are required');
+    }
+  
+    const { location, interests, timeRange, maxResults } = preferences;
+  
+    if (!location || typeof location !== 'string') {
+      throw new Error('Invalid or missing location');
+    }
+  
+    if (!Array.isArray(interests)) {
+      throw new Error('Interests must be an array');
+    }
+  
+    if (!timeRange || !timeRange.start || !timeRange.end) {
+      throw new Error('Invalid or missing time range');
+    }
+  
+    if (typeof maxResults !== 'number' || maxResults <= 0) {
+      throw new Error('maxResults must be a positive number');
+    }
+  
+    return true;
+  };
+  
+  
+
 module.exports = {
     validateTrackRequest,
-    validateManageRequest
+    validateManageRequest,
+    validateExplorePreferences
 }
