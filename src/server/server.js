@@ -96,7 +96,7 @@ app.get('/analytics', body('orgId').notEmpty().escape(), (req, res) => {
   }
   try {
     const data = matchedData(req)
-    return itemController.getAnalytics(data.email)
+    return itemController.getAnalytics(data.orgId)
       .then((resp) => res.send(resp))
       .catch((err) => res.status(500).send({ errors: err }))
   } catch (error) {

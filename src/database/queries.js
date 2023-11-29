@@ -86,9 +86,9 @@ module.exports = {
             .then((results) => results.rows)
             .catch((error) => error)
     },
-    getUserEvents: (email) => {
-        const queryString = 'SELECT * FROM events WHERE events.email = $1'
-        const values = [email]
+    getUserEvents: (orgId) => {
+        const queryString = 'SELECT * FROM events WHERE events.org_id = $1'
+        const values = [orgId]
         return db.client
             .query(queryString, values)
             .then((results) => results.rows)

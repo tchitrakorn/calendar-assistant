@@ -4,16 +4,12 @@ const db = require('../database/queries')
 
 // Calendar
 const track = async (request) => {
-    const userArray = await db.getUser(request.email)
-    const user = userArray[0]
-    const { id, email: userEmail, org_id, client_id, client_secret, openai_key, access_token, refresh_token, city } = user
-    await db.logUserEvent(request.email, 'track', org_id)
+    await db.logUserEvent(request.email, 'track', request.orgId)
     return await calendarModel.readCalendar(request)
 }
 
 const manage = async (request) => {
-    const orgId = request.orgId || 0  // 'UNKNOWN' if not provided (This is an option for end-users who call our service directly)
-    await db.logUserEvent(request.email, 'manage', orgId)
+    await db.logUserEvent(request.email, 'manage', request.orgId)
     return calendarModel.writeCalendar(request)
 }
 
@@ -22,8 +18,8 @@ const explore = (prompt) => {
 }
 
 // User data
-const getAnalytics = (email) => {
-    return dataModel.analyzeData(email)
+const getAnalytics = async (orgId) => {
+    return dataModel.analyzeData(orgId)
 }
 
 const getUserData = (email) => {
