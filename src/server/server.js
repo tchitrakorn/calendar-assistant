@@ -23,7 +23,8 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 // Answers questions related to the user's current calendar
 app.get('/track', [
   body('email').isEmail().normalizeEmail(),
-  body('orgId').notEmpty().escape()
+  body('email').custom(v.validateUser),
+  body('orgId').custom(v.validateOrgId)
 ], async (req, res) => {
   const expressValidatorErrors = validationResult(req)
   if (!expressValidatorErrors.isEmpty()) {
@@ -51,8 +52,9 @@ app.get('/track', [
 // Creates, modifies, or deletes an event based on user requirements
 app.post('/manage', [
   body('email').isEmail().normalizeEmail(),
+  body('email').custom(v.validateUser),
   body('type').notEmpty().escape(),
-  body('orgId').notEmpty().escape()
+  body('orgId').custom(v.validateOrgId)
 ], async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -89,76 +91,94 @@ app.get('/explore', body('prompt').notEmpty().escape(), (req, res) => {
 })
 
 // Retrieves non-sensitive information from users’ conversation log for Google Analytics
-app.get('/analytics', body('orgId').notEmpty().escape(), (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).send({ errors: errors.array() }) // Bad input
-  }
-  try {
-    const data = matchedData(req)
-    return itemController.getAnalytics(data.orgId)
-      .then((resp) => res.send(resp))
-      .catch((err) => res.status(500).send({ errors: err }))
-  } catch (error) {
-    res.status(500).send({ errors: errors.array() }) // Internal server errors
-  }
-})
+app.get('/analytics',
+  body('orgId').custom(v.validateOrgId),
+  (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).send({ errors: errors.array() }) // Bad input
+    }
+    try {
+      const data = matchedData(req)
+      return itemController.getAnalytics(data.orgId)
+        .then((resp) => res.send(resp))
+        .catch((err) => res.status(500).send({ errors: err }))
+    } catch (error) {
+      res.status(500).send({ errors: errors.array() }) // Internal server errors
+    }
+  })
 
 // Retrieves user information
-app.get('/data', body('email').notEmpty().escape(), (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).send({ errors: errors.array() }) // Bad input
-  }
-  try {
-    const data = matchedData(req)
-    return itemController.getUserData(data.email)
-      .then((resp) => res.send(resp))
-      .catch((err) => res.status(500).send({ errors: err }))
-  } catch (error) {
-    res.status(500).send({ errors: errors.array() }) // Internal server errors
-  }
-})
+app.get('/data',
+  body('email').isEmail().normalizeEmail(),
+  body('email').custom(v.validateUser),
+  (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).send({ errors: errors.array() }) // Bad input
+    }
+    try {
+      const data = matchedData(req)
+      return itemController.getUserData(data.email)
+        .then((resp) => res.send(resp))
+        .catch((err) => res.status(500).send({ errors: err }))
+    } catch (error) {
+      res.status(500).send({ errors: errors.array() }) // Internal server errors
+    }
+  })
 
 // Update client information
-app.patch('/data', body('email').notEmpty().escape(), (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).send({ errors: errors.array() }) // Bad input
-  }
-  try {
-    const email = req.body.email
-    delete req.body.email
-    return itemController.manageUserData(email, req.body)
-      .then(() => res.send('Successfully updated your data in our database!'))
-      .catch((err) => res.status(500).send({ errors: err }))
-  } catch (error) {
-    res.status(500).send({ errors: errors.array() }) // Internal server errors
-  }
-})
+app.patch('/data',
+  body('email').isEmail().normalizeEmail(),
+  body('email').custom(v.validateUser),
+  (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).send({ errors: errors.array() }) // Bad input
+    }
+    try {
+      const email = req.body.email
+      delete req.body.email
+      return itemController.manageUserData(email, req.body)
+        .then(() => res.send({
+          action: 'update data',
+          status: 'success'
+        }))
+        .catch((err) => res.status(500).send({ errors: err }))
+    } catch (error) {
+      res.status(500).send({ errors: errors.array() }) // Internal server errors
+    }
+  })
 
 // Delete client information
-app.delete('/data', body('email').notEmpty().escape(), (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).send({ errors: errors.array() }) // Bad input
-  }
-  try {
-    const data = matchedData(req)
-    return itemController.deleteUserData(data.email)
-      .then(() => res.send('Successfully deleted your data from our database!'))
-      .catch((err) => res.status(500).send({ errors: err }))
-  } catch (error) {
-    res.status(500).send({ errors: errors.array() }) // Internal server errors
-  }
-})
+app.delete('/data',
+  body('email').isEmail().normalizeEmail(),
+  body('email').custom(v.validateUser),
+  (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).send({ errors: errors.array() }) // Bad input
+    }
+    try {
+      const data = matchedData(req)
+      return itemController.deleteUserData(data.email)
+        .then(() => res.send({
+          action: 'delete data',
+          status: 'success'
+        }))
+        .catch((err) => res.status(500).send({ errors: err }))
+    } catch (error) {
+      res.status(500).send({ errors: errors.array() }) // Internal server errors
+    }
+  })
 
 // Stores client's info and authenticate clients
 app.post(
   '/authenticate',
   [
     body(['email', 'clientId', 'clientSecret', 'openAIKey', 'orgId']).notEmpty().escape(),
-    body('email').isEmail().normalizeEmail()
+    body('email').isEmail().normalizeEmail(),
+    body('orgId').custom(v.validateOrgId)
   ],
   (req, res) => {
     const errors = validationResult(req)

@@ -33,7 +33,7 @@ const validateTrackRequest = async (request) => {
         }
     }
     if (request.groupBy) {
-        if (['eventType', 'event', 'color'].includes(request.groupBy)) {
+        if (!['eventType', 'event', 'color'].includes(request.groupBy)) {
             errors.push({
                 field: 'groupBy',
                 message: 'Must be either eventType, event, or color'
@@ -98,8 +98,24 @@ const validateManageRequest = async (request) => {
     return errors
 }
 
+const validateOrgId = async (orgId) => {
+    const result = await db.getOrg(orgId)
+    if (result.length == 0) {
+        throw new Error('Invalid orgId')
+    }
+}
+
+const validateUser = async (email) => {
+    const result = await db.getUser(email)
+    if (result.length == 0) {
+        throw new Error('Invalid user email')
+    }
+}
+
 module.exports = {
     validateTrackRequest,
     validateManageRequest,
-    validateAuthenticateRequest
+    validateAuthenticateRequest,
+    validateOrgId,
+    validateUser
 }
