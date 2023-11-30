@@ -60,9 +60,9 @@ const validateExplorePreferences = (preferences) => {
       throw new Error('Interests must be an array');
     }
   
-    if (!timeRange || !timeRange.start || !timeRange.end) {
-      throw new Error('Invalid or missing time range');
-    }
+    //if (!timeRange || !timeRange.start || !timeRange.end) {
+    //  throw new Error('Invalid or missing time range');
+    //}
   
     if (typeof maxResults !== 'number' || maxResults <= 0) {
       throw new Error('maxResults must be a positive number');

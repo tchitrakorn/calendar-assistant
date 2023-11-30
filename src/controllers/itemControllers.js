@@ -14,8 +14,8 @@ const manage = async (request) => {
     return calendarModel.writeCalendar(request)
 }
 
-const explore = (request) => {
-    return calendarModel.readCalendar(request)
+const explore = () => {
+    return calendarModel.readCalendar()
 }
 
 // User data
