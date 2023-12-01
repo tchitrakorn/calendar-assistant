@@ -12,23 +12,21 @@ const destroyer = require('server-destroy');
 /**
 * Start by acquiring a pre-authenticated oAuth2 client.
 */
-async function authenticate(email, client_id, client_secret, openAIKey) {
+async function authenticate(email, client_id, client_secret, openAIKey, orgId) {
 
     const oAuth2Client = await getAuthenticatedClient(client_id, client_secret);
     // Make a simple request to the People API using our pre-authenticated client. The `request()` method
     // takes an GaxiosOptions object.  Visit https://github.com/JustinBeckwith/gaxios.
     const url = 'https://www.googleapis.com/auth/calendar';
     const res = await oAuth2Client.request({ url });
-    //console.log(res.data);
 
     // After acquiring an access_token, you may want to check on the audience, expiration,
     // or original scopes requested.  You can do that with the `getTokenInfo` method.
     const tokenInfo = await oAuth2Client.getTokenInfo(
         oAuth2Client.credentials.access_token
     );
-    //console.log(tokenInfo);
 
-    return db.postUser(
+    await db.postUser(
         email,
         client_id,
         client_secret,
@@ -36,8 +34,12 @@ async function authenticate(email, client_id, client_secret, openAIKey) {
         oAuth2Client.credentials.refresh_token,
         openAIKey
     )
-        .then(res => res)
-        .catch(error => error)
+
+    await db.postUsersOrgs(
+        email,
+        orgId
+    )
+
 }
 
 /**

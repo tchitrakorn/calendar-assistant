@@ -3,14 +3,14 @@ const dataModel = require('../models/dataModel')
 const db = require('../database/queries')
 
 // Calendar
-const track = async (email, prompt) => {
-    await db.logUserEvent(email, 'track', prompt)
-    return await calendarModel.readCalendar(email, prompt)
+const track = async (request) => {
+    await db.logUserEvent(request.email, 'track', request.orgId)
+    return await calendarModel.readCalendar(request)
 }
 
-const manage = async (email, prompt, city) => {
-    await db.logUserEvent(email, 'manage', prompt)
-    return calendarModel.writeCalendar(email, prompt, city)
+const manage = async (request) => {
+    await db.logUserEvent(request.email, 'manage', request.orgId)
+    return calendarModel.writeCalendar(request)
 }
 
 const explore = (prompt) => {
@@ -18,8 +18,8 @@ const explore = (prompt) => {
 }
 
 // User data
-const getAnalytics = (email) => {
-    return dataModel.analyzeData(email)
+const getAnalytics = async (orgId) => {
+    return dataModel.analyzeData(orgId)
 }
 
 const getUserData = (email) => {

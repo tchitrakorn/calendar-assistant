@@ -2,15 +2,21 @@ const db = require('../database/queries')
 
 // Models for user-related data from our database
 
-const analyzeData = async (email) => {
-  const events = await db.getUserEvents(email)
-  const filteredEvents = events.map((event) => {
-    return {
-      eventType: event.event_type,
-      prompt: event.prompt
+const analyzeData = async (orgId) => {
+  const events = await db.getUserEvents(orgId)
+  let analysis = {}
+  for (let i = 0; i < events.length; i++) {
+    const currEvent = events[i]
+    if (!analysis.hasOwnProperty(currEvent.email)) {
+      analysis[currEvent.email] = {
+        "track": 0,
+        "manage": 0,
+        "explore": 0
+      }
     }
-  })
-  return filteredEvents
+    analysis[currEvent.email][currEvent.event_type] += 1
+  }
+  return analysis
 }
 
 const readData = (email) => {

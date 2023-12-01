@@ -25,6 +25,25 @@ module.exports = {
             .then((results) => results.rows)
             .catch((error) => error)
     },
+    postUsersOrgs: (email, orgId) => {
+        const queryString =
+            'INSERT INTO usersOrgs (email, org_id) \
+            VALUES ($1, $2)'
+        const values = [email, orgId]
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
+    },
+    getUsersOrgs: (email) => {
+        const queryString =
+            'SELECT org_id FROM usersOrgs WHERE usersOrgs.email = $1'
+        const values = [email]
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
+    },
     postUserAccessToken: (email, accessToken) => {
         const queryString =
             'INSERT INTO users (access_token) VALUES ($1) WHERE users.email = $2'
@@ -34,13 +53,15 @@ module.exports = {
             .then((results) => results.rows)
             .catch((error) => error)
     },
-    deleteUser: (email) => {
-        const queryString = 'DELETE FROM users WHERE users.email = $1'
+    deleteUser: async (email) => {
+        const queryString1 = 'DELETE FROM usersOrgs WHERE usersOrgs.email = $1;'
+        const queryString2 = 'DELETE FROM events WHERE events.email = $1'
+        const queryString3 = 'DELETE FROM users WHERE users.email = $1'
         const values = [email]
-        return db.client
-            .query(queryString, values)
-            .then((results) => results.rows)
-            .catch((error) => error)
+        await db.client.query(queryString1, values)
+        await db.client.query(queryString2, values)
+        await db.client.query(queryString3, values)
+        return;
     },
     updateUser: (email, fieldsToUpdate) => {
         const fieldValuePairs = []
@@ -58,18 +79,26 @@ module.exports = {
             .then((results) => results.rows)
             .catch((error) => error)
     },
-    logUserEvent: (email, eventType, prompt) => {
-        const queryString = 'INSERT INTO events (email, event_type, prompt) \
+    logUserEvent: (email, eventType, orgId) => {
+        const queryString = 'INSERT INTO events (email, event_type, org_id) \
         VALUES ($1, $2, $3)'
-        const values = [email, eventType, prompt]
+        const values = [email, eventType, orgId]
         return db.client
             .query(queryString, values)
             .then((results) => results.rows)
             .catch((error) => error)
     },
-    getUserEvents: (email) => {
-        const queryString = 'SELECT * FROM events WHERE events.email = $1'
-        const values = [email]
+    getUserEvents: (orgId) => {
+        const queryString = 'SELECT * FROM events WHERE events.org_id = $1'
+        const values = [orgId]
+        return db.client
+            .query(queryString, values)
+            .then((results) => results.rows)
+            .catch((error) => error)
+    },
+    getOrg: (orgId) => {
+        const queryString = 'SELECT * FROM orgs WHERE orgs.id = $1'
+        const values = [orgId]
         return db.client
             .query(queryString, values)
             .then((results) => results.rows)
