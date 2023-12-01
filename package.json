@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/tchitrakorn/calendar-assistant#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.23.5",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "body-parser": "^1.20.2",
     "concurrently": "^8.2.2",
@@ -49,6 +50,7 @@
     "@google-cloud/local-auth": "^3.0.0",
     "cors": "^2.8.5",
     "node-fetch": "^2.6.1",
-    "python-shell": "^5.0.0"
+    "python-shell": "^5.0.0",
+    "supertest": "^6.3.3"
   }
 }
