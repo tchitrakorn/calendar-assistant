@@ -11,7 +11,7 @@ const analyzeData = async (orgId) => {
       analysis[currEvent.email] = {
         "track": 0,
         "manage": 0,
-        "explore": 0
+        "freeSlots": 0
       }
     }
     analysis[currEvent.email][currEvent.event_type] += 1
