@@ -4,7 +4,7 @@ Calendar Assistant is a Google Calendar management service with natural language
 
 # Client app
 
-Check out our app [here](https://github.com/karenswang/calendar-assistant-client)
+Check out our calendar assistant chatbot app, which uses this API under the hood, [here](https://github.com/karenswang/calendar-assistant-client)
 
 ## Usage
 
@@ -35,16 +35,6 @@ If you’re a developer who’s interested in running our code locally, feel fre
 ```
 cd calendar-assistant
 npm install
-```
-
-We also recommend using a virtual environment to handle the python packages, which can be found in `requirements.txt`.
-Example:
-
-```
-pip install virtualenv
-python<version> -m venv <virtual-environment-name>  # inside the project directory
-source env/bin/activate  # activate the virtual environment
-pip install -r requirements.txt  # install required dependencies
 ```
 
 ### Setting up environment variables
@@ -96,17 +86,7 @@ For our server, database, and testing setup, Calendar Assistant primarily uses:
 -   husky
 -   jest
 -   pg
-
-For our calendar management logic, the python dependencies can be found in `requirements.txt`. We recommend having a virtual environment and do a `pip install -r requirements.txt`.
-
-For our natural language processing capabilities, Calendar Assistant primarily uses:
-
--   llama-index (for LLM and OpenAI)
-
-Please see the following for additional information about LLM and LlamaIndex:
-
--   [LlamaIndex introduction](https://ts.llamaindex.ai/)
--   [LlamaIndex high-level concepts](https://gpt-index.readthedocs.io/en/latest/getting_started/concepts.html#high-level-concepts)
+-   prettier
 
 ## Test Plan
 
@@ -114,15 +94,18 @@ Please see the following for additional information about LLM and LlamaIndex:
 
 ```
 # To run all tests
-python -m unittest discover
+npm test
 
 # To run with coverage
-coverage run -m unittest discover
-coverage report -m
+npx jest --coverage
 
-# To run itemController unit test
-npx jest itemControllers.test.js
+# To run individual test suites
+npx jest [testName].test.js
 ```
+
+### Coverage
+
+Check out coverage results in the coverage folder.
 
 ### System tests
 

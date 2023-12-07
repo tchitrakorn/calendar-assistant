@@ -17,6 +17,15 @@
     "bugs": {
         "url": "https://github.com/tchitrakorn/calendar-assistant/issues"
     },
+    "jest": {
+        "collectCoverage": true,
+        "coverageReporters": [
+            "json",
+            "lcov",
+            "text",
+            "clover"
+        ]
+    },
     "homepage": "https://github.com/tchitrakorn/calendar-assistant#readme",
     "devDependencies": {
         "@babel/preset-env": "^7.23.5",
