@@ -3,7 +3,7 @@ const db = require('../database/queries')
 const validateAuthenticateRequest = async (request) => {
     const result = await db.getUsersOrgs(request.email)
     const hasExistingOrgRecord = result.some(
-        (record) => record.org_id === request.orgId
+        (record) => record.org_id == request.orgId
     )
     const errors = []
     if (!hasExistingOrgRecord) {
@@ -20,7 +20,7 @@ const validateTrackRequest = async (request) => {
 
     const result = await db.getUsersOrgs(request.email)
     const hasExistingOrgRecord = result.some(
-        (record) => record.org_id === request.orgId
+        (record) => record.org_id == request.orgId
     )
     if (!hasExistingOrgRecord) {
         errors.push({
@@ -53,7 +53,7 @@ const validateManageRequest = async (request) => {
 
     const result = await db.getUsersOrgs(request.email)
     const hasExistingOrgRecord = result.some(
-        (record) => record.org_id === request.orgId
+        (record) => record.org_id == request.orgId
     )
     if (!hasExistingOrgRecord) {
         errors.push({
@@ -68,7 +68,7 @@ const validateManageRequest = async (request) => {
             message: 'Must be either insert, delete, or update',
         })
     }
-    if (request.type === 'insert') {
+    if (request.type == 'insert') {
         if (
             request.startTime == null ||
             request.endTime == null ||
@@ -80,7 +80,7 @@ const validateManageRequest = async (request) => {
             })
         }
     }
-    if (request.type === 'delete') {
+    if (request.type == 'delete') {
         if (request.eventId == null) {
             errors.push({
                 field: ['eventId'],
@@ -88,7 +88,7 @@ const validateManageRequest = async (request) => {
             })
         }
     }
-    if (request.type === 'update') {
+    if (request.type == 'update') {
         if (request.eventId == null) {
             errors.push({
                 field: ['eventId'],
@@ -118,14 +118,14 @@ const validateManageRequest = async (request) => {
 
 const validateOrgId = async (orgId) => {
     const result = await db.getOrg(orgId)
-    if (result.length === 0) {
+    if (result.length == 0) {
         throw new Error('Invalid orgId')
     }
 }
 
 const validateUser = async (email) => {
     const result = await db.getUser(email)
-    if (result.length === 0) {
+    if (result.length == 0) {
         throw new Error('Invalid user email')
     }
 }

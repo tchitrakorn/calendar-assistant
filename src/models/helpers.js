@@ -19,7 +19,7 @@ const listEvents = async (auth, parameters) => {
     const scope = parameters.scope || 7
     let groupBy = parameters.groupBy
     const analysis = parameters.analysis && true
-    if (analysis === true && groupBy == null) {
+    if (analysis == true && groupBy == null) {
         groupBy = 'event'
     }
 
@@ -55,7 +55,7 @@ const listEvents = async (auth, parameters) => {
             const end = new Date(currEvent.end.dateTime) / 60000
             const elapsedTime = end - start
             totalScheduledTime += elapsedTime
-            if (groupBy === 'eventType') {
+            if (groupBy == 'eventType') {
                 if (currEvent.eventType in formattedEvents) {
                     formattedEvents[currEvent.eventType].push(currEvent)
                 } else {
@@ -69,7 +69,7 @@ const listEvents = async (auth, parameters) => {
                     analysisByType[currEvent.eventType].minutes = elapsedTime
                     analysisByType[currEvent.eventType].count = 1
                 }
-            } else if (groupBy === 'event') {
+            } else if (groupBy == 'event') {
                 if (currEvent.summary in formattedEvents) {
                     formattedEvents[currEvent.summary].push(currEvent)
                 } else {
@@ -83,9 +83,9 @@ const listEvents = async (auth, parameters) => {
                     analysisByType[currEvent.summary].minutes = elapsedTime
                     analysisByType[currEvent.summary].count = 1
                 }
-            } else if (groupBy === 'color') {
+            } else if (groupBy == 'color') {
                 const colorLabel = EVENT_COLOR_LABELS[currEvent.colorId]
-                if (colorLabel === undefined) {
+                if (colorLabel == undefined) {
                     continue
                 }
                 if (colorLabel in formattedEvents) {

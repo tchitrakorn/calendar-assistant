@@ -1,6 +1,8 @@
 // Models for calendar-related tasks
+const { PythonShell } = require('python-shell')
 const queries = require('../database/queries')
 const helpers = require('./helpers')
+const { authenticate } = require('@google-cloud/local-auth')
 const { google } = require('googleapis')
 
 const readCalendar = async (request) => {
@@ -67,11 +69,11 @@ const writeCalendar = async (request) => {
         }
         const client = await google.auth.fromJSON(credentials)
 
-        if (request.type === 'insert') {
+        if (request.type == 'insert') {
             return helpers.insertEvent(client, request).catch(console.error)
-        } else if (request.type === 'delete') {
+        } else if (request.type == 'delete') {
             return helpers.deleteEvent(client, request).catch(console.error)
-        } else if (request.type === 'update') {
+        } else if (request.type == 'update') {
             return helpers.updateEvent(client, request).catch(console.error)
         }
     } catch (error) {
@@ -130,9 +132,7 @@ const findFreeSlots = async (request) => {
         freeSlots.sort((a, b) => b.freeTime - a.freeTime)
 
         // Convert freeTime back to a string with 'hours' for readability
-        freeSlots.forEach((slot) => {
-            slot.freeTime = slot.freeTime.toString() + ' hours'
-        })
+        freeSlots.forEach((slot) => (slot.freeTime = `${slot.freeTime} hours`))
 
         return { freeSlots }
     } catch (error) {

@@ -16,6 +16,7 @@
         "no-multi-str": "off",
         "no-unused-vars": "off",
         "camelcase": "off",
-        "prettier/prettier": "error" // Makes sure Prettier errors are shown as ESLint errors
+        "prettier/prettier": "error", // Makes sure Prettier errors are shown as ESLint errors
+        "eqeqeq": "off"
     }
 }

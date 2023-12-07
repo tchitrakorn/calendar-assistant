@@ -104,6 +104,12 @@ app.get(
     ],
     async (req, res) => {
         // Similar validation and error handling as in '/track'
+        const expressValidatorErrors = validationResult(req)
+        if (!expressValidatorErrors.isEmpty()) {
+            return res
+                .status(400)
+                .send({ errors: expressValidatorErrors.array() }) // 400 for bad input
+        }
         try {
             const freeSlots = await itemController.freeSlots(req.body)
             if (freeSlots) {
