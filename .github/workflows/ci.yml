@@ -18,5 +18,6 @@ jobs:
               run: |
                   npx eslint .
                   npx prettier --check .
+            # not including test in CI becasue of local database connection
             # - name: Run tests
-            #   run: npm test itemController
+            #   run: npm test
