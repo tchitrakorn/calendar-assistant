@@ -20,6 +20,8 @@ const mockManageData = jest.spyOn(controllers, 'manage').mockReturnValue({
   eventDetails: {}
 });
 
+const mockFreeSlotsData = jest.spyOn(controllers, 'freeSlots').mockReturnValue({});
+
 auth.authenticate = jest.fn().mockResolvedValue({})
 controllers.getAnalytics = jest.fn().mockResolvedValue({})
 controllers.getUserData = jest.fn().mockResolvedValue({})
@@ -513,6 +515,41 @@ describe('DELETE /data', () => {
   }
   it('should return 400 for an invalid email', async () => {
     const response = await request(baseURL).delete('/data').send(dataRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
+
+// Test free-slot endpoint
+describe('GET /free-slot', () => {
+  const dataRequest = {
+    "email": "test@gmail.com",
+    "orgId": "1"
+  }
+  it('should return 200 for a valid request', async () => {
+    const response = await request(baseURL).get('/free-slot').send(dataRequest);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.error).toBe(undefined);
+  });
+});
+
+describe('GET /free-slot', () => {
+  const dataRequest = {
+    "email": "wrongtest@gmail.com",
+    "orgId": "1"
+  }
+  it('should return 400 for an invalid email', async () => {
+    const response = await request(baseURL).get('/free-slot').send(dataRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
+
+describe('GET /free-slot', () => {
+  const dataRequest = {
+    "email": "test@gmail.com",
+    "orgId": "100"
+  }
+  it('should return 400 for an invalid orgId', async () => {
+    const response = await request(baseURL).get('/free-slot').send(dataRequest);
     expect(response.statusCode).toBe(400);
   });
 });
