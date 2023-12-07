@@ -104,6 +104,9 @@ npx jest --coverage
 npx jest [testName].test.js
 ```
 
+### Coverage
+Check out coverage results in the coverage folder.
+
 ### System tests
 
 After you have started the server, you can go to our Postman test link [here](https://www.postman.com/speeding-crater-260064/workspace/team-workspace/collection/24382407-1efdb353-e3ac-429e-8601-0ae8c17c734a?action=share&creator=24382407) to test our API endpoints.
