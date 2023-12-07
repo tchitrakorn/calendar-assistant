@@ -55,6 +55,38 @@ describe('Calendar Model', () => {
                 message: 'An error occurred while running the calendar script.',
             })
         })
+
+        it('should handle Google API client creation failure', async () => {
+            google.auth.fromJSON.mockRejectedValue(
+                new Error('Client creation failed')
+            )
+
+            const response = await calendarModel.readCalendar(mockRequest)
+            expect(google.auth.fromJSON).toHaveBeenCalled()
+            expect(response).toEqual({
+                success: false,
+                message: 'An error occurred while running the calendar script.',
+            })
+        })
+
+        it('should handle error from helpers.listEvents', async () => {
+            // Mock listEvents to throw an error
+            helpers.listEvents.mockRejectedValue(
+                new Error('Error listing events')
+            )
+
+            const response = await calendarModel.readCalendar(mockRequest)
+
+            // Assertions
+            expect(helpers.listEvents).toHaveBeenCalledWith(
+                mockClient,
+                mockRequest
+            )
+            expect(response).toEqual({
+                success: false,
+                message: 'An error occurred while running the calendar script.',
+            })
+        })
     })
 
     describe('writeCalendar', () => {
@@ -73,8 +105,49 @@ describe('Calendar Model', () => {
             expect(response).toEqual({ result: 'event inserted' })
         })
 
-        // Add tests for 'delete' and 'update' cases
-        // Add a test for 'user not found' scenario
+        it('should handle delete event', async () => {
+            const mockDeleteRequest = { ...mockRequest, type: 'delete' }
+            helpers.deleteEvent.mockResolvedValue({ result: 'event deleted' })
+
+            const response =
+                await calendarModel.writeCalendar(mockDeleteRequest)
+
+            expect(queries.getUser).toHaveBeenCalledWith(
+                mockDeleteRequest.email
+            )
+            expect(helpers.deleteEvent).toHaveBeenCalledWith(
+                mockClient,
+                mockDeleteRequest
+            )
+            expect(response).toEqual({ result: 'event deleted' })
+        })
+
+        it('should handle update event', async () => {
+            const mockUpdateRequest = { ...mockRequest, type: 'update' }
+            helpers.updateEvent.mockResolvedValue({ result: 'event updated' })
+
+            const response =
+                await calendarModel.writeCalendar(mockUpdateRequest)
+
+            expect(queries.getUser).toHaveBeenCalledWith(
+                mockUpdateRequest.email
+            )
+            expect(helpers.updateEvent).toHaveBeenCalledWith(
+                mockClient,
+                mockUpdateRequest
+            )
+            expect(response).toEqual({ result: 'event updated' })
+        })
+
+        it('should handle user not found in writeCalendar', async () => {
+            queries.getUser.mockResolvedValueOnce([])
+
+            const response = await calendarModel.writeCalendar(mockWriteRequest)
+            expect(response).toEqual({
+                success: false,
+                message: 'An error occurred while running the calendar script.',
+            })
+        })
     })
 
     describe('findFreeSlots', () => {
@@ -98,6 +171,45 @@ describe('Calendar Model', () => {
             await expect(
                 calendarModel.findFreeSlots(mockRequest)
             ).rejects.toThrow('User not found')
+        })
+
+        it('should handle invalid eventsResponse in findFreeSlots', async () => {
+            helpers.listEvents.mockResolvedValue({})
+
+            await expect(
+                calendarModel.findFreeSlots(mockRequest)
+            ).rejects.toThrow('Failed to retrieve calendar events')
+            expect(helpers.listEvents).toHaveBeenCalledWith(
+                mockClient,
+                mockRequest
+            )
+        })
+
+        it('should use default scope value if none provided', async () => {
+            const mockRequestWithoutScope = { email: 'test@gmail.com' }
+            helpers.listEvents.mockResolvedValue(mockEventsResponse)
+            helpers.calculateFreeTime.mockReturnValue({ '2022-01-01': 2 })
+
+            const response = await calendarModel.findFreeSlots(
+                mockRequestWithoutScope
+            )
+
+            expect(helpers.calculateFreeTime).toHaveBeenCalledWith(
+                mockEventsResponse.allEvents,
+                7
+            ) // Default scope
+            expect(response.freeSlots).toBeDefined()
+        })
+
+        it('should handle error in calculateFreeTime', async () => {
+            helpers.listEvents.mockResolvedValue(mockEventsResponse)
+            helpers.calculateFreeTime.mockImplementation(() => {
+                throw new Error('Error in calculateFreeTime')
+            })
+
+            await expect(
+                calendarModel.findFreeSlots(mockRequest)
+            ).rejects.toThrow('Error in calculateFreeTime')
         })
 
         // Add a test for 'failed to retrieve calendar events' scenario
