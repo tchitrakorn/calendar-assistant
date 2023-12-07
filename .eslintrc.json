@@ -4,7 +4,10 @@
         "es2021": true,
         "jest": true
     },
-    "extends": "standard",
+    "extends": [
+        "standard",
+        "plugin:prettier/recommended" // Adds Prettier recommended rules and extends eslint-config-prettier
+    ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
@@ -12,6 +15,7 @@
     "rules": {
         "no-multi-str": "off",
         "no-unused-vars": "off",
-        "camelcase": "off"
+        "camelcase": "off",
+        "prettier/prettier": "error" // Makes sure Prettier errors are shown as ESLint errors
     }
 }
