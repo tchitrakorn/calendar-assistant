@@ -1,56 +1,56 @@
 {
-  "name": "calendar-assistant",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest",
-    "prepare": "husky install",
-    "server-dev": "concurrently \"nodemon src/server/server.js\" \"nodemon src/server/auth.js\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tchitrakorn/calendar-assistant.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/tchitrakorn/calendar-assistant/issues"
-  },
-  "homepage": "https://github.com/tchitrakorn/calendar-assistant#readme",
-  "devDependencies": {
-    "@babel/preset-env": "^7.23.5",
-    "@typescript-eslint/eslint-plugin": "^6.8.0",
-    "body-parser": "^1.20.2",
-    "concurrently": "^8.2.2",
-    "eslint": "^8.51.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-config-standard-with-typescript": "^39.1.1",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-n": "^16.2.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.33.2",
-    "express": "^4.18.2",
-    "express-validator": "^7.0.1",
-    "googleapis": "^127.0.0",
-    "husky": "^8.0.0",
-    "jest": "^29.7.0",
-    "lint-staged": "^15.0.1",
-    "negotiator": "^0.6.3",
-    "nodemon": "^3.0.1",
-    "open": "^9.1.0",
-    "passport-google-oauth2": "^0.2.0",
-    "pg": "^8.11.3",
-    "prettier": "^3.0.3",
-    "server-destroy": "^1.0.1",
-    "typescript": "^5.2.2"
-  },
-  "dependencies": {
-    "@google-cloud/local-auth": "^3.0.0",
-    "cors": "^2.8.5",
-    "node-fetch": "^2.6.1",
-    "python-shell": "^5.0.0",
-    "supertest": "^6.3.3"
-  }
+    "name": "calendar-assistant",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest",
+        "prepare": "husky install",
+        "server-dev": "concurrently \"nodemon src/server/server.js\" \"nodemon src/server/auth.js\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tchitrakorn/calendar-assistant.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/tchitrakorn/calendar-assistant/issues"
+    },
+    "homepage": "https://github.com/tchitrakorn/calendar-assistant#readme",
+    "devDependencies": {
+        "@babel/preset-env": "^7.23.5",
+        "@typescript-eslint/eslint-plugin": "^6.8.0",
+        "body-parser": "^1.20.2",
+        "concurrently": "^8.2.2",
+        "eslint": "^8.51.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-config-standard-with-typescript": "^39.1.1",
+        "eslint-plugin-import": "^2.28.1",
+        "eslint-plugin-n": "^16.2.0",
+        "eslint-plugin-promise": "^6.1.1",
+        "eslint-plugin-react": "^7.33.2",
+        "express": "^4.18.2",
+        "express-validator": "^7.0.1",
+        "googleapis": "^127.0.0",
+        "husky": "^8.0.0",
+        "jest": "^29.7.0",
+        "lint-staged": "^15.0.1",
+        "negotiator": "^0.6.3",
+        "nodemon": "^3.0.1",
+        "open": "^9.1.0",
+        "passport-google-oauth2": "^0.2.0",
+        "pg": "^8.11.3",
+        "prettier": "^3.0.3",
+        "server-destroy": "^1.0.1",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "@google-cloud/local-auth": "^3.0.0",
+        "cors": "^2.8.5",
+        "node-fetch": "^2.6.1",
+        "python-shell": "^5.0.0",
+        "supertest": "^6.3.3"
+    }
 }
