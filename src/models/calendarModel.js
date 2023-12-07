@@ -31,7 +31,7 @@ const readCalendar = async (request) => {
             refresh_token,
         }
         const client = await google.auth.fromJSON(credentials)
-        return helpers.listEvents(client, request).catch(console.error)
+        return await helpers.listEvents(client, request)
     } catch (error) {
         console.error('An error occurred:', error)
         return {
