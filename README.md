@@ -88,7 +88,6 @@ For our server, database, and testing setup, Calendar Assistant primarily uses:
 -   pg
 -   prettier
 
-
 ## Test Plan
 
 ### Unit tests
@@ -105,6 +104,7 @@ npx jest [testName].test.js
 ```
 
 ### Coverage
+
 Check out coverage results in the coverage folder.
 
 ### System tests
