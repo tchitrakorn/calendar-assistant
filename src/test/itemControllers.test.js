@@ -57,6 +57,28 @@ describe('Item Controllers', () => {
             expect(response).toEqual({ result: 'calendar updated' })
         })
     })
+    describe('freeSlots function', () => {
+        const mockRequest = { email: 'test@gmail.com', orgId: 123 }
+
+        beforeEach(() => {
+            jest.clearAllMocks()
+            db.logUserEvent.mockResolvedValue(null)
+            calendarModel.findFreeSlots.mockResolvedValue({ slots: [] })
+        })
+
+        it('should log user event and find free slots', async () => {
+            const response = await itemControllers.freeSlots(mockRequest)
+            expect(db.logUserEvent).toHaveBeenCalledWith(
+                mockRequest.email,
+                'freeSlots',
+                mockRequest.orgId
+            )
+            expect(calendarModel.findFreeSlots).toHaveBeenCalledWith(
+                mockRequest
+            )
+            expect(response).toEqual({ slots: [] })
+        })
+    })
 
     describe('getAnalytics function', () => {
         const mockOrgId = 123
