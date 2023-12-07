@@ -9,19 +9,5 @@
         "sourceType": "module"
     },
     "rules": {
-    },
-    "overrides": [
-        {
-            "files": ["*.ts", "*.tsx"],
-            "extends": [
-                "standard-with-typescript"
-            ],
-            "parserOptions": {
-                "project": "./tsconfig.json"
-            },
-            // any TypeScript specific rules here
-            "rules": {
-            }
-        }
-    ]
+    }
 }
