@@ -97,6 +97,9 @@ python -m unittest discover
 # To run with coverage
 coverage run -m unittest discover
 coverage report -m
+
+# To run itemController unit test
+npx jest itemControllers.test.js
 ```
 
 ### System tests
