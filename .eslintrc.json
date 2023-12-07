@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true
     },
     "extends": "standard",
     "parserOptions": {
@@ -9,5 +10,8 @@
         "sourceType": "module"
     },
     "rules": {
+        "no-multi-str": "off",
+        "no-unused-vars": "off",
+        "camelcase": "off"
     }
 }

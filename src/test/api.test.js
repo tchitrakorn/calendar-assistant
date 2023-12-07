@@ -10,12 +10,11 @@ const setupTestUser = (done) => {
     'access-token',
     'refresh-token',
     'open-ai-key'
-  ).then(() => {
-    db.postUsersOrgs(
-      'test@gmail.com',
-      '1'
-    )
-  }).catch(err => err)
+  )
+    .then(() => {
+      db.postUsersOrgs('test@gmail.com', '1')
+    })
+    .catch((err) => err)
   done()
 }
 
@@ -25,19 +24,19 @@ const setup = async () => {
 
 beforeEach((done) => {
   setup()
-    .then(res => res)
-    .catch(err => err)
+    .then((res) => res)
+    .catch((err) => err)
   done()
 })
 
 afterEach(async (done) => {
-  jest.restoreAllMocks();
+  jest.restoreAllMocks()
   db.deleteUser({
     email: 'test@gmail.com'
   })
-    .then(res => res)
-    .catch(err => err)
-});
+    .then((res) => res)
+    .catch((err) => err)
+})
 
 describe('GET /track', () => {
   jest.mock('../controllers/itemControllers')
@@ -54,11 +53,11 @@ describe('GET /track', () => {
     analysis: true
   }
   it('should return 200', async () => {
-    const response = await request(baseURL).get('/track').send(trackRequest);
-    expect(response.statusCode).toBe(200);
-    expect(response.body.error).toBe(null);
-  });
-});
+    const response = await request(baseURL).get('/track').send(trackRequest)
+    expect(response.statusCode).toBe(200)
+    expect(response.body.error).toBe(null)
+  })
+})
 
 describe('GET /track', () => {
   jest.mock('../controllers/itemControllers')
@@ -75,10 +74,10 @@ describe('GET /track', () => {
     analysis: true
   }
   it('should return 400', async () => {
-    const response = await request(baseURL).get('/track').send(trackRequest);
-    expect(response.statusCode).toBe(400);
-  });
-});
+    const response = await request(baseURL).get('/track').send(trackRequest)
+    expect(response.statusCode).toBe(400)
+  })
+})
 
 describe('GET /track', () => {
   jest.mock('../controllers/itemControllers')
@@ -95,10 +94,10 @@ describe('GET /track', () => {
     analysis: true
   }
   it('should return 400', async () => {
-    const response = await request(baseURL).get('/track').send(trackRequest);
-    expect(response.statusCode).toBe(400);
-  });
-});
+    const response = await request(baseURL).get('/track').send(trackRequest)
+    expect(response.statusCode).toBe(400)
+  })
+})
 
 describe('GET /track', () => {
   jest.mock('../controllers/itemControllers')
@@ -115,10 +114,10 @@ describe('GET /track', () => {
     analysis: true
   }
   it('should return 400', async () => {
-    const response = await request(baseURL).get('/track').send(trackRequest);
-    expect(response.statusCode).toBe(400);
-  });
-});
+    const response = await request(baseURL).get('/track').send(trackRequest)
+    expect(response.statusCode).toBe(400)
+  })
+})
 
 describe('POST /manage', () => {
   jest.mock('../controllers/itemControllers')
@@ -127,21 +126,23 @@ describe('POST /manage', () => {
     eventDetails: {}
   })
   const manageRequest = {
-    "orgId": "1",
-    "email": "test@gmail.com",
-    "type": "insert",
-    "startTime": "2023-11-30T16:00:00-05:00",
-    "endTime": "2023-11-30T18:00:00-05:00",
-    "timezone": "America/New_York",
-    "summary": "Test summary",
-    "description": "Test description",
-    "location": "Test location"
+    orgId: '1',
+    email: 'test@gmail.com',
+    type: 'insert',
+    startTime: '2023-11-30T16:00:00-05:00',
+    endTime: '2023-11-30T18:00:00-05:00',
+    timezone: 'America/New_York',
+    summary: 'Test summary',
+    description: 'Test description',
+    location: 'Test location'
   }
   it('should return 200', async () => {
-    const response = await request(baseURL).post('/manage').send(manageRequest);
-    expect(response.statusCode).toBe(200);
-  });
-});
+    const response = await request(baseURL)
+      .post('/manage')
+      .send(manageRequest)
+    expect(response.statusCode).toBe(200)
+  })
+})
 
 describe('POST /manage', () => {
   jest.mock('../controllers/itemControllers')
@@ -150,22 +151,24 @@ describe('POST /manage', () => {
     eventDetails: {}
   })
   const manageRequest = {
-    "orgId": "1",
-    "email": "test@gmail.com",
-    "type": "update",
-    "eventId": "event-id",
-    "startTime": "2023-11-30T16:00:00-05:00",
-    "endTime": "2023-11-30T18:00:00-05:00",
-    "timezone": "America/New_York",
-    "summary": "Test summary",
-    "description": "Test description",
-    "location": "Test location"
+    orgId: '1',
+    email: 'test@gmail.com',
+    type: 'update',
+    eventId: 'event-id',
+    startTime: '2023-11-30T16:00:00-05:00',
+    endTime: '2023-11-30T18:00:00-05:00',
+    timezone: 'America/New_York',
+    summary: 'Test summary',
+    description: 'Test description',
+    location: 'Test location'
   }
   it('should return 200', async () => {
-    const response = await request(baseURL).post('/manage').send(manageRequest);
-    expect(response.statusCode).toBe(200);
-  });
-});
+    const response = await request(baseURL)
+      .post('/manage')
+      .send(manageRequest)
+    expect(response.statusCode).toBe(200)
+  })
+})
 
 describe('POST /manage', () => {
   jest.mock('../controllers/itemControllers')
@@ -174,15 +177,15 @@ describe('POST /manage', () => {
     eventDetails: {}
   })
   const manageRequest = {
-    "orgId": "1",
-    "email": "test@gmail.com",
-    "type": "delete",
-    "eventId": "event-id"
+    orgId: '1',
+    email: 'test@gmail.com',
+    type: 'delete',
+    eventId: 'event-id'
   }
   it('should return 200', async () => {
-    const response = await request(baseURL).post('/manage').send(manageRequest);
-    expect(response.statusCode).toBe(200);
-  });
-});
-
-
+    const response = await request(baseURL)
+      .post('/manage')
+      .send(manageRequest)
+    expect(response.statusCode).toBe(200)
+  })
+})
