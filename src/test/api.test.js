@@ -1,11 +1,13 @@
 const request = require('supertest')
 const baseURL = 'http://localhost:3000'
 const controllers = require('../controllers/itemControllers')
+const auth = require('../server/auth')
 const db = require('../database/queries')
 const server = require('../server/server')
 
-// Setup mock
+// Setup mock and expected return values
 jest.mock('../controllers/itemControllers')
+jest.mock('../server/auth')
 
 const mockTrackData = jest.spyOn(controllers, 'track').mockReturnValue({
   allEvents: [],
@@ -18,9 +20,13 @@ const mockManageData = jest.spyOn(controllers, 'manage').mockReturnValue({
   eventDetails: {}
 });
 
-//const mockAnalyticsData = jest.spyOn(controllers, 'getAnalytics').mockReturnValue({});
+auth.authenticate = jest.fn().mockResolvedValue({})
+controllers.getAnalytics = jest.fn().mockResolvedValue({})
+controllers.getUserData = jest.fn().mockResolvedValue({})
+controllers.manageUserData = jest.fn().mockResolvedValue({})
+controllers.deleteUserData = jest.fn().mockResolvedValue({})
 
-// Setup database because each test
+// Setup database before each test
 beforeEach((done) => {
   db.postUser(
     'test@gmail.com',
@@ -48,6 +54,86 @@ afterEach((done) => {
   done()
 });
 
+// Test authenticate endpoint
+describe('POST /authenticate', () => {
+  const authenticateRequest = {
+    "email": "test@gmail.com",
+    "clientId": "client-id",
+    "clientSecret": "client-secret",
+    "openAIKey": "open-ai-key",
+    "orgId": "1"
+  }
+  it('should return 200 for a valid request', async () => {
+    const response = await request(baseURL).post('/authenticate').send(authenticateRequest);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.error).toBe(undefined);
+  });
+});
+
+describe('POST /authenticate', () => {
+  const authenticateRequest = {
+    "clientId": "client-id",
+    "clientSecret": "client-secret",
+    "openAIKey": "open-ai-key",
+    "orgId": "1"
+  }
+  it('should return 400 for a missing email', async () => {
+    const response = await request(baseURL).post('/authenticate').send(authenticateRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
+
+describe('POST /authenticate', () => {
+  const authenticateRequest = {
+    "email": "test@gmail.com",
+    "clientSecret": "client-secret",
+    "openAIKey": "open-ai-key",
+    "orgId": "1"
+  }
+  it('should return 400 for a missing clientId', async () => {
+    const response = await request(baseURL).post('/authenticate').send(authenticateRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
+
+describe('POST /authenticate', () => {
+  const authenticateRequest = {
+    "email": "test@gmail.com",
+    "clientId": "client-id",
+    "openAIKey": "open-ai-key",
+    "orgId": "1"
+  }
+  it('should return 400 for a missing clientSecret', async () => {
+    const response = await request(baseURL).post('/authenticate').send(authenticateRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
+
+describe('POST /authenticate', () => {
+  const authenticateRequest = {
+    "email": "test@gmail.com",
+    "clientId": "client-id",
+    "clientSecret": "client-secret",
+    "orgId": "1"
+  }
+  it('should return 400 for a missing openAIKey', async () => {
+    const response = await request(baseURL).post('/authenticate').send(authenticateRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
+
+describe('POST /authenticate', () => {
+  const authenticateRequest = {
+    "email": "test@gmail.com",
+    "clientId": "client-id",
+    "clientSecret": "client-secret",
+    "openAIKey": "open-ai-key"
+  }
+  it('should return 400 for a missing orgId', async () => {
+    const response = await request(baseURL).post('/authenticate').send(authenticateRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
 
 // Test track endpoint
 describe('GET /track', () => {
@@ -59,9 +145,7 @@ describe('GET /track', () => {
     analysis: true
   }
   it('should return 200 for a valid request', async () => {
-    //const spy = jest.spyOn(controllers, 'track');
     const response = await request(baseURL).get('/track').send(trackRequest);
-    //expect(spy).toHaveBeenCalled();
     expect(response.statusCode).toBe(200);
     expect(response.body.error).toBe(undefined);
   });
@@ -109,7 +193,6 @@ describe('GET /track', () => {
   });
 });
 
-
 // Test manage endpoint
 describe('POST /manage (insert)', () => {
   const manageRequest = {
@@ -126,6 +209,7 @@ describe('POST /manage (insert)', () => {
   it('should return 200 for a valid request (insert)', async () => {
     const response = await request(baseURL).post('/manage').send(manageRequest);
     expect(response.statusCode).toBe(200);
+    expect(response.body.error).toBe(undefined);
   });
 });
 
@@ -147,7 +231,6 @@ describe('POST /manage (insert)', () => {
   });
 });
 
-
 describe('POST /manage (insert)', () => {
   const manageRequest = {
     "orgId": "1",
@@ -165,7 +248,6 @@ describe('POST /manage (insert)', () => {
     expect(response.statusCode).toBe(400);
   });
 });
-
 
 describe('POST /manage (insert)', () => {
   const manageRequest = {
@@ -185,7 +267,6 @@ describe('POST /manage (insert)', () => {
   });
 });
 
-
 describe('POST /manage (insert)', () => {
   const manageRequest = {
     "orgId": "1",
@@ -202,7 +283,6 @@ describe('POST /manage (insert)', () => {
     expect(response.statusCode).toBe(400);
   });
 });
-
 
 describe('POST /manage (insert)', () => {
   const manageRequest = {
@@ -221,7 +301,6 @@ describe('POST /manage (insert)', () => {
   });
 });
 
-
 describe('POST /manage (update)', () => {
   const manageRequest = {
     "orgId": "1",
@@ -238,6 +317,7 @@ describe('POST /manage (update)', () => {
   it('should return 200 for an valid request (update)', async () => {
     const response = await request(baseURL).post('/manage').send(manageRequest);
     expect(response.statusCode).toBe(200);
+    expect(response.body.error).toBe(undefined);
   });
 });
 
@@ -307,6 +387,7 @@ describe('POST /manage (delete)', () => {
   it('should return 200 for a valid request (delete)', async () => {
     const response = await request(baseURL).post('/manage').send(manageRequest);
     expect(response.statusCode).toBe(200);
+    expect(response.body.error).toBe(undefined);
   });
 });
 
@@ -336,7 +417,6 @@ describe('POST /manage (delete)', () => {
   });
 });
 
-
 describe('POST /manage (delete)', () => {
   const manageRequest = {
     "orgId": "1",
@@ -349,18 +429,93 @@ describe('POST /manage (delete)', () => {
   });
 });
 
-/*
 // Test analytics endpoint
 describe('GET /analytics', () => {
-  const manageRequest = {
+  const analyticsRequest = {
     "orgId": "1"
   }
   it('should return 200 for a valid request', async () => {
-    const response = await request(baseURL).get('/analytics').send(manageRequest);
+    const response = await request(baseURL).get('/analytics').send(analyticsRequest);
     expect(response.statusCode).toBe(200);
+    expect(response.body.error).toBe(undefined);
   });
 });
-*/
+
+describe('GET /analytics', () => {
+  const analyticsRequest = {
+    "orgId": "100"
+  }
+  it('should return 400 for an invalid orgId', async () => {
+    const response = await request(baseURL).get('/analytics').send(analyticsRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
+
+// Test data endpoint
+describe('GET /data', () => {
+  const dataRequest = {
+    "email": "test@gmail.com"
+  }
+  it('should return 200 for a valid request', async () => {
+    const response = await request(baseURL).get('/data').send(dataRequest);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.error).toBe(undefined);
+  });
+});
+
+describe('GET /data', () => {
+  const dataRequest = {
+    "email": "wrongtest@gmail.com"
+  }
+  it('should return 400 for an invalid email', async () => {
+    const response = await request(baseURL).get('/data').send(dataRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
+
+describe('PATCH /data', () => {
+  const dataRequest = {
+    "email": "test@gmail.com",
+    "city": "NYC"
+  }
+  it('should return 200 for a valid request', async () => {
+    const response = await request(baseURL).patch('/data').send(dataRequest);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.error).toBe(undefined);
+  });
+});
+
+describe('PATCH /data', () => {
+  const dataRequest = {
+    "email": "wrongtest@gmail.com",
+    "city": "NYC"
+  }
+  it('should return 400 for an invalid email', async () => {
+    const response = await request(baseURL).patch('/data').send(dataRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
+
+describe('DELETE /data', () => {
+  const dataRequest = {
+    "email": "test@gmail.com"
+  }
+  it('should return 200 for a valid request', async () => {
+    const response = await request(baseURL).delete('/data').send(dataRequest);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.error).toBe(undefined);
+  });
+});
+
+describe('DELETE /data', () => {
+  const dataRequest = {
+    "email": "wrongtest@gmail.com"
+  }
+  it('should return 400 for an invalid email', async () => {
+    const response = await request(baseURL).delete('/data').send(dataRequest);
+    expect(response.statusCode).toBe(400);
+  });
+});
 
 
 
