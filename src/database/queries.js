@@ -9,7 +9,14 @@ module.exports = {
             .then((results) => results.rows)
             .catch((error) => error)
     },
-    postUser: (email, clientId, clientSecret, accessToken, refreshToken, openAIKey) => {
+    postUser: (
+        email,
+        clientId,
+        clientSecret,
+        accessToken,
+        refreshToken,
+        openAIKey
+    ) => {
         const queryString =
             'INSERT INTO users (email, client_id, client_secret, access_token, refresh_token, openai_key) \
             VALUES ($1, $2, $3, $4, $5, $6) \
@@ -19,7 +26,14 @@ module.exports = {
             access_token = EXCLUDED.access_token, \
             refresh_token = EXCLUDED.refresh_token, \
             openai_key = EXCLUDED.openai_key'
-        const values = [email, clientId, clientSecret, accessToken, refreshToken, openAIKey]
+        const values = [
+            email,
+            clientId,
+            clientSecret,
+            accessToken,
+            refreshToken,
+            openAIKey,
+        ]
         return db.client
             .query(queryString, values)
             .then((results) => results.rows)
@@ -61,7 +75,6 @@ module.exports = {
         await db.client.query(queryString1, values)
         await db.client.query(queryString2, values)
         await db.client.query(queryString3, values)
-        return;
     },
     updateUser: (email, fieldsToUpdate) => {
         const fieldValuePairs = []
@@ -80,7 +93,8 @@ module.exports = {
             .catch((error) => error)
     },
     logUserEvent: (email, eventType, orgId) => {
-        const queryString = 'INSERT INTO events (email, event_type, org_id) \
+        const queryString =
+            'INSERT INTO events (email, event_type, org_id) \
         VALUES ($1, $2, $3)'
         const values = [email, eventType, orgId]
         return db.client
@@ -103,5 +117,5 @@ module.exports = {
             .query(queryString, values)
             .then((results) => results.rows)
             .catch((error) => error)
-    }
+    },
 }

@@ -1,18 +1,18 @@
-const { authenticate } = require('@google-cloud/local-auth');
-const { google } = require('googleapis');
+const { authenticate } = require('@google-cloud/local-auth')
+const { google } = require('googleapis')
 
 const EVENT_COLOR_LABELS = {
-    1: "Lavender",
-    2: "Sage",
-    3: "Grape",
-    4: "Flamingo",
-    5: "Banana",
-    6: "Tangerine",
-    7: "Peacock",
-    8: "Graphite",
-    9: "Blueberry",
-    10: "Basil",
-    11: "Tomato"
+    1: 'Lavender',
+    2: 'Sage',
+    3: 'Grape',
+    4: 'Flamingo',
+    5: 'Banana',
+    6: 'Tangerine',
+    7: 'Peacock',
+    8: 'Graphite',
+    9: 'Blueberry',
+    10: 'Basil',
+    11: 'Tomato',
 }
 
 const listEvents = async (auth, parameters) => {
@@ -23,7 +23,7 @@ const listEvents = async (auth, parameters) => {
         groupBy = 'event'
     }
 
-    const calendar = google.calendar({ version: 'v3', auth });
+    const calendar = google.calendar({ version: 'v3', auth })
     const newDate = new Date()
     newDate.setDate(new Date().getDate() + scope)
 
@@ -33,25 +33,25 @@ const listEvents = async (auth, parameters) => {
         timeMax: newDate.toISOString(),
         singleEvents: true,
         orderBy: 'startTime',
-    });
+    })
 
-    const events = res.data.items;
+    const events = res.data.items
     if (!events || events.length === 0) {
         return {
             allEvents: [],
             groupedByType: {},
-            analysisByType: {}
+            analysisByType: {},
         }
     }
 
-    let formattedEvents = {}
-    let analysisByType = {}
+    const formattedEvents = {}
+    const analysisByType = {}
     let totalScheduledTime = 0
 
     if (groupBy != null) {
         for (let i = 0; i < events.length; i++) {
             const currEvent = events[i]
-            const start = new Date(currEvent.start.dateTime) / 60000  // convert to minutes
+            const start = new Date(currEvent.start.dateTime) / 60000 // convert to minutes
             const end = new Date(currEvent.end.dateTime) / 60000
             const elapsedTime = end - start
             totalScheduledTime += elapsedTime
@@ -105,9 +105,8 @@ const listEvents = async (auth, parameters) => {
         }
 
         for (const [type, analysis] of Object.entries(analysisByType)) {
-            analysis.percentage = analysis.minutes / totalScheduledTime * 100
+            analysis.percentage = (analysis.minutes / totalScheduledTime) * 100
         }
-
     }
 
     const response = {}
@@ -123,16 +122,16 @@ const listEvents = async (auth, parameters) => {
 }
 
 const insertEvent = async (auth, parameters) => {
-    const calendar = google.calendar({ version: 'v3', auth });
+    const calendar = google.calendar({ version: 'v3', auth })
     const event = {
         start: {
             dateTime: new Date(parameters.startTime),
-            timezone: parameters.timezone
+            timezone: parameters.timezone,
         },
         end: {
             dateTime: new Date(parameters.endTime),
-            timezone: parameters.timezone
-        }
+            timezone: parameters.timezone,
+        },
     }
     if (parameters.summary) {
         event.summary = parameters.summary
@@ -146,55 +145,61 @@ const insertEvent = async (auth, parameters) => {
 
     const res = await calendar.events.insert({
         calendarId: 'primary',
-        resource: event
-    });
+        resource: event,
+    })
 
     const response = {
         type: 'insert',
-        eventDetails: res.data
+        eventDetails: res.data,
     }
 
     return response
 }
 
 const deleteEvent = async (auth, parameters) => {
-    const calendar = google.calendar({ version: 'v3', auth });
+    const calendar = google.calendar({ version: 'v3', auth })
 
     const getRes = await calendar.events.get({
         calendarId: 'primary',
-        eventId: parameters.eventId
-    });
+        eventId: parameters.eventId,
+    })
 
     const deleteRes = await calendar.events.delete({
         calendarId: 'primary',
-        eventId: parameters.eventId
-    });
+        eventId: parameters.eventId,
+    })
 
     const response = {
         type: 'delete',
-        eventDetails: getRes.data
+        eventDetails: getRes.data,
     }
 
     return response
 }
 
 const updateEvent = async (auth, parameters) => {
-    const calendar = google.calendar({ version: 'v3', auth });
+    const calendar = google.calendar({ version: 'v3', auth })
 
     const getRes = await calendar.events.get({
         calendarId: 'primary',
-        eventId: parameters.eventId
-    });
+        eventId: parameters.eventId,
+    })
 
     const event = {}
 
-    event.summary = parameters.summary ? parameters.summary : getRes.data.summary
-    event.location = parameters.location ? parameters.location : getRes.data.location
-    event.description = parameters.description ? parameters.description : getRes.data.description
+    event.summary = parameters.summary
+        ? parameters.summary
+        : getRes.data.summary
+    event.location = parameters.location
+        ? parameters.location
+        : getRes.data.location
+    event.description = parameters.description
+        ? parameters.description
+        : getRes.data.description
     if (parameters.start) {
         event.start = {
             dateTime: new Date(parameters.startTime),
-            timezone: parameters.timezone
+            timezone: parameters.timezone,
         }
     } else {
         event.start = getRes.data.start
@@ -202,7 +207,7 @@ const updateEvent = async (auth, parameters) => {
     if (parameters.end) {
         event.end = {
             dateTime: new Date(parameters.endTime),
-            timezone: parameters.timezone
+            timezone: parameters.timezone,
         }
     } else {
         event.end = getRes.data.end
@@ -211,12 +216,12 @@ const updateEvent = async (auth, parameters) => {
     const res = await calendar.events.update({
         calendarId: 'primary',
         eventId: parameters.eventId,
-        resource: event
-    });
+        resource: event,
+    })
 
     const response = {
         type: 'update',
-        eventDetails: res.data
+        eventDetails: res.data,
     }
 
     return response
@@ -228,37 +233,37 @@ const updateEvent = async (auth, parameters) => {
  * @return {Object} Object containing free time per day.
  */
 const calculateFreeTime = (events, scope) => {
-    const hoursInDay = 16; // assuming 16 hours of waking time per day
-    const freeTimeByDay = {};
+    const hoursInDay = 16 // assuming 16 hours of waking time per day
+    const freeTimeByDay = {}
 
     // Initialize every day in the scope with the maximum free hours
     for (let i = 0; i < scope; i++) {
-        const date = new Date();
-        date.setDate(date.getDate() + i);
-        const dateKey = date.toISOString().split('T')[0]; // format as 'YYYY-MM-DD'
-        freeTimeByDay[dateKey] = hoursInDay;
+        const date = new Date()
+        date.setDate(date.getDate() + i)
+        const dateKey = date.toISOString().split('T')[0] // format as 'YYYY-MM-DD'
+        freeTimeByDay[dateKey] = hoursInDay
     }
-  
-    events.forEach(event => {
-      const startDate = new Date(event.start.dateTime);
-      const endDate = new Date(event.end.dateTime);
-      const dateKey = startDate.toISOString().split('T')[0]; // format as 'YYYY-MM-DD'
-  
-      const durationHours = (endDate - startDate) / (1000 * 60 * 60); // event duration in hours
-  
-      if (!freeTimeByDay[dateKey]) {
-        freeTimeByDay[dateKey] = hoursInDay; // initialize with total available hours
-      }
-      freeTimeByDay[dateKey] -= durationHours; // subtract event duration
-    });
-  
-    return freeTimeByDay;
-  }  
+
+    events.forEach((event) => {
+        const startDate = new Date(event.start.dateTime)
+        const endDate = new Date(event.end.dateTime)
+        const dateKey = startDate.toISOString().split('T')[0] // format as 'YYYY-MM-DD'
+
+        const durationHours = (endDate - startDate) / (1000 * 60 * 60) // event duration in hours
+
+        if (!freeTimeByDay[dateKey]) {
+            freeTimeByDay[dateKey] = hoursInDay // initialize with total available hours
+        }
+        freeTimeByDay[dateKey] -= durationHours // subtract event duration
+    })
+
+    return freeTimeByDay
+}
 
 module.exports = {
     listEvents,
     insertEvent,
     deleteEvent,
     updateEvent,
-    calculateFreeTime
+    calculateFreeTime,
 }

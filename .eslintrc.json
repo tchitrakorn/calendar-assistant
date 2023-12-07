@@ -1,27 +1,22 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true
     },
-    "extends": "standard",
+    "extends": [
+        "standard",
+        "plugin:prettier/recommended" // Adds Prettier recommended rules and extends eslint-config-prettier
+    ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
     "rules": {
-    },
-    "overrides": [
-        {
-            "files": ["*.ts", "*.tsx"],
-            "extends": [
-                "standard-with-typescript"
-            ],
-            "parserOptions": {
-                "project": "./tsconfig.json"
-            },
-            // any TypeScript specific rules here
-            "rules": {
-            }
-        }
-    ]
+        "no-multi-str": "off",
+        "no-unused-vars": "off",
+        "camelcase": "off",
+        "prettier/prettier": "error", // Makes sure Prettier errors are shown as ESLint errors
+        "eqeqeq": "off"
+    }
 }

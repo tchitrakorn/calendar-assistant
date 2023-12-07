@@ -36,7 +36,7 @@ const manageUserData = (email, fieldsToUpdate) => {
 }
 
 const deleteUserData = (email) => {
-    return dataModel.deleteData(email);
+    return dataModel.deleteData(email)
 }
 
 module.exports = {
@@ -47,5 +47,5 @@ module.exports = {
     getUserData,
     manageUserData,
     deleteUserData,
-    freeSlots
+    freeSlots,
 }
