@@ -105,7 +105,7 @@ npx jest [testName].test.js
 
 ### Coverage
 
-Check out coverage results in the coverage folder.
+Run `npx jest --coverage` or check out coverage results in the coverage folder. We aim to a high coverage for all our code, but the auth.js file is currently not covered due to the complexity of the testing Google OAuth2. We will work on this in the future.
 
 ### System tests
 
