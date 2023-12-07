@@ -90,6 +90,25 @@ app.get('/explore', body('prompt').notEmpty().escape(), (req, res) => {
   res.status(500).send({ errors: errors.array() })
 })
 
+app.get('/free-slot', [
+  body('email').isEmail().normalizeEmail(),
+  body('email').custom(v.validateUser),
+  body('orgId').custom(v.validateOrgId)
+], async (req, res) => {
+  // Similar validation and error handling as in '/track'
+  try {
+    const freeSlots = await itemController.freeSlots(req.body);
+    if (freeSlots) {
+      return res.send(freeSlots);
+    } else {
+      return res.status(500).send({ error: 'No data found' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ error: error.message });
+  }
+})
+
 // Retrieves non-sensitive information from users’ conversation log for Google Analytics
 app.get('/analytics',
   body('orgId').custom(v.validateOrgId),
