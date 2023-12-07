@@ -17,6 +17,11 @@ const explore = (prompt) => {
     return calendarModel.readCalendar(prompt)
 }
 
+const freeSlots = async (request) => {
+    await db.logUserEvent(request.email, 'freeSlots', request.orgId)
+    return calendarModel.findFreeSlots(request)
+}
+
 // User data
 const getAnalytics = async (orgId) => {
     return dataModel.analyzeData(orgId)
@@ -31,7 +36,7 @@ const manageUserData = (email, fieldsToUpdate) => {
 }
 
 const deleteUserData = (email) => {
-    return dataModel.deleteData(email);
+    return dataModel.deleteData(email)
 }
 
 module.exports = {
@@ -41,5 +46,6 @@ module.exports = {
     getAnalytics,
     getUserData,
     manageUserData,
-    deleteUserData
+    deleteUserData,
+    freeSlots,
 }
