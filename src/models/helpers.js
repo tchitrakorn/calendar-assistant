@@ -222,9 +222,43 @@ const updateEvent = async (auth, parameters) => {
     return response
 }
 
+/**
+ * Calculate the free time available each day based on calendar events.
+ * @param {Array} events Array of calendar event objects.
+ * @return {Object} Object containing free time per day.
+ */
+const calculateFreeTime = (events, scope) => {
+    const hoursInDay = 16; // assuming 16 hours of waking time per day
+    const freeTimeByDay = {};
+
+    // Initialize every day in the scope with the maximum free hours
+    for (let i = 0; i < scope; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() + i);
+        const dateKey = date.toISOString().split('T')[0]; // format as 'YYYY-MM-DD'
+        freeTimeByDay[dateKey] = hoursInDay;
+    }
+  
+    events.forEach(event => {
+      const startDate = new Date(event.start.dateTime);
+      const endDate = new Date(event.end.dateTime);
+      const dateKey = startDate.toISOString().split('T')[0]; // format as 'YYYY-MM-DD'
+  
+      const durationHours = (endDate - startDate) / (1000 * 60 * 60); // event duration in hours
+  
+      if (!freeTimeByDay[dateKey]) {
+        freeTimeByDay[dateKey] = hoursInDay; // initialize with total available hours
+      }
+      freeTimeByDay[dateKey] -= durationHours; // subtract event duration
+    });
+  
+    return freeTimeByDay;
+  }  
+
 module.exports = {
     listEvents,
     insertEvent,
     deleteEvent,
-    updateEvent
+    updateEvent,
+    calculateFreeTime
 }
