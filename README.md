@@ -1,6 +1,9 @@
 # Calendar Assistant
 Calendar Assistant is a Google Calendar management service with natural language processing capabilities. The service aims to help clients track, manage and optimize scheduling for both existing and upcoming events on their calendars. Enhanced with dialog ability, this service will not only support regular parameterized requests but also conversational prompts such as “Find an open slot on my calendar for a 30-min coffee chat with Ben this week.” The data store will be for user profiles, authentication tokens (required to access Google Calendar, OpenAI API, etc.), chat histories, and user feedback, all subject to user consent.
 
+# Client app
+Check out our app [here](https://github.com/karenswang/calendar-assistant-client)
+
 ## Usage
 To use our service, please make sure that you have obtained the following credentials:
 1. Google Cloud Project’s client ID
@@ -94,6 +97,9 @@ python -m unittest discover
 # To run with coverage
 coverage run -m unittest discover
 coverage report -m
+
+# To run itemController unit test
+npx jest itemControllers.test.js
 ```
 
 ### System tests

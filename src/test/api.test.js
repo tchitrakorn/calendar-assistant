@@ -516,9 +516,3 @@ describe('DELETE /data', () => {
     expect(response.statusCode).toBe(400);
   });
 });
-
-
-
-
-
-
