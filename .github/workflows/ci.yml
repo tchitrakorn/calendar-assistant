@@ -18,3 +18,5 @@ jobs:
               run: |
                   npx eslint .
                   npx prettier --check .
+            - name: Run tests
+              run: npm test
