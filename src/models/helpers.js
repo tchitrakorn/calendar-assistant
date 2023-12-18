@@ -148,9 +148,12 @@ const insertEvent = async (auth, parameters) => {
         resource: event,
     })
 
+    const gCalResponse = res.data
+    delete gCalResponse.iCalUID
+
     const response = {
         type: 'insert',
-        eventDetails: res.data,
+        eventDetails: gCalResponse,
     }
 
     return response
